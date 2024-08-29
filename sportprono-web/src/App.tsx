@@ -1,14 +1,20 @@
 import React from 'react';
-import GroupList from './components/group-list';
+import Header from './components/header';
+import MainContent from './components/main-content';
+import SideBar from './components/sidebar';
 import './App.css';
 
 
 function App() {
 
   return (
-    <>
-      <GroupList />
-    </>
+    <div className='App'>
+      <Header />
+      <div className='content'>
+        <SideBar />
+        <MainContent />
+      </div>
+    </div>
   )
 }
 
