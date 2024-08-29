@@ -1,5 +1,6 @@
 import React from 'react';
-import logo from '../assets/images/logo/gold.png'
+import logo from '../../assets/images/logo/gold.png'
+import './header.less';
 
 
 function Header() {

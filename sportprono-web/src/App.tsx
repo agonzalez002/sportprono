@@ -1,8 +1,8 @@
 import React from 'react';
-import Header from './components/header';
-import MainContent from './components/main-content';
-import SideBar from './components/sidebar';
-import './App.css';
+import Header from './components/Header/header';
+import MainContent from './components/MainContent/main-content';
+import SideBar from './components/Sidebar/sidebar';
+import './style.less';
 
 
 function App() {

@@ -1,10 +1,11 @@
 import React from 'react';
+import './sidebar.less';
 
 
 function SideBar() {
 
   return (
-    <div className='header'>
+    <div className='sidebar'>
       <h1>SideBar section</h1>
     </div>
   )

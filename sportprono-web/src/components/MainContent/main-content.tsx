@@ -1,11 +1,11 @@
 import React from 'react';
-import GroupList from './group-list';
-
+import GroupList from '../GroupList/group-list';
+import './main-content.less';
 
 function MainContent() {
 
   return (
-    <div className='header'>
+    <div className='maincontent'>
       <GroupList />
     </div>
   )
