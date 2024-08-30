@@ -1,13 +1,17 @@
 import React from 'react';
+import { Routes, Route } from 'react-router-dom';
 import GroupList from '../GroupList/group-list';
-import './main-content.less';
+import StyledMainContent from './StyledMainContent';
 
 function MainContent() {
 
   return (
-    <div className='maincontent'>
-      <GroupList />
-    </div>
+    <StyledMainContent>
+      <Routes>
+        <Route path='/' element={<GroupList />} />
+        <Route path='/details' element={<h1>Details !</h1>} />
+      </Routes>
+    </StyledMainContent>
   )
 }
 

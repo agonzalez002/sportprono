@@ -1,13 +1,15 @@
 import React from 'react';
-import './sidebar.less';
+import StyledSidebar from './StyledSidebar';
+import { Button } from '@mui/material';
 
 
 function SideBar() {
 
   return (
-    <div className='sidebar'>
+    <StyledSidebar>
       <h1>SideBar section</h1>
-    </div>
+      <Button variant='contained' color='primary'>Mon bouton</Button>
+    </StyledSidebar>
   )
 }
 

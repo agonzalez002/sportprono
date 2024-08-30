@@ -1,14 +1,20 @@
 import React from 'react';
-import logo from '../../assets/images/logo/gold.png'
-import './header.less';
+import logoLight from '../../assets/images/logo/logoLight.png';
+import darkLogo from '../../assets/images/logo/logoDark.png';
+import StyledHeader from './StyledHeader';
+import { useTheme } from '@mui/material';
 
 
 function Header() {
 
+  const theme = useTheme();
+
+  const logoSrc = theme.palette.mode === 'dark' ? darkLogo : logoLight;
+
   return (
-    <div className='header'>
-      <img src={logo} alt='SportProno logo' height="150" />
-    </div>
+    <StyledHeader>
+      <img src={logoSrc} alt='SportProno logo' height="75" />
+    </StyledHeader>
   )
 }
 
