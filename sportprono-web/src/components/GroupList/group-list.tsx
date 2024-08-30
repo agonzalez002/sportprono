@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { StyledGroupContent, StyledLink } from './StyledGroupList';
+import { getGroups } from '../../services/groupServices';
 
 interface Group {
   id: number,
@@ -16,15 +18,10 @@ function GroupList() {
   useEffect(() => {
     setLoading(true);
     const getData = async () => {
-        await fetch('http://127.0.0.1:8000/api/groups/')
-        .then(resp => resp.json())
-        .then( data => {
+        await getGroups().then( data => {
+          setLoading(false);
           setGroups(data);
-          setLoading(false);
-        }).catch(e => {
-          setError(true);
-          setLoading(false);
-        })
+      });
     };
     getData();
   }, []);
@@ -38,11 +35,15 @@ function GroupList() {
   };
 
   return (
-    <>
+    <StyledGroupContent>
       { groups && groups.map((group: Group) => {
-        return <p key={group.id}>{group.name}</p>
+        return (
+          <StyledLink key={group.id} to={`/details/${group.id}`}>
+            {group.name} group
+          </StyledLink>
+        )        
       })}
-    </>
+    </StyledGroupContent>
   )
 }
 
