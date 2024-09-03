@@ -1,3 +1,4 @@
+// @ts-ignore TS6133
 import React, { useState, useEffect } from 'react';
 import { StyledGroupContent, StyledLink } from './StyledGroupList';
 import { getGroups } from '../../services/groupServices';
@@ -21,6 +22,8 @@ function GroupList() {
         await getGroups().then( data => {
           setLoading(false);
           setGroups(data);
+      }).catch(e => {
+        setError(e);
       });
     };
     getData();

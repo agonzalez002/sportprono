@@ -1,0 +1,35 @@
+services:
+  django:
+    build:
+      context: ./sportprono-api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./sportprono-api:/app
+    depends_on:
+      - db
+    environment:
+      - DJANGO_SETTINGS_MODULE=sportprono.settings
+      - DATABASE_URL=postgres://sportpronoadmin:sportprono_adminpwd19360@db:5432/sportprono
+
+  react:
+    build:
+      context: ./sportprono-web
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./sportprono-web:/app
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: sportprono
+      POSTGRES_USER: sportpronoadmin
+      POSTGRES_PASSWORD: sportprono_adminpwd19360
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

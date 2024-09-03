@@ -1,4 +1,5 @@
-import React from 'react';
+// @ts-ignore TS6133
+import React from 'react'; 
 import logoLight from '../../assets/images/logo/logoLight.png';
 import darkLogo from '../../assets/images/logo/logoDark.png';
 import StyledHeader from './StyledHeader';

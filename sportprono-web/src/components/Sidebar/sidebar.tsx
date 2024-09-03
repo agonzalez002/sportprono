@@ -1,3 +1,4 @@
+// @ts-ignore TS6133
 import React from 'react';
 import StyledSidebar from './StyledSidebar';
 import { Button } from '@mui/material';

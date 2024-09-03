@@ -87,7 +87,7 @@ DATABASES = {
         'NAME': 'sportprono',
         'USER': 'sportpronoadmin',
         'PASSWORD': 'sportprono_adminpwd19360',
-        'HOST': 'localhost',
+        'HOST': 'db',
         'PORT': '5432',
     }
 }

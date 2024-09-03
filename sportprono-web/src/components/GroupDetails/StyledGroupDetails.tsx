@@ -1,7 +1,7 @@
 import { styled } from "@mui/material";
 import { Link } from "react-router-dom";
 
-export const StyledGroupDetails = styled('div')(({ theme }) => ({
+export const StyledGroupDetails = styled('div')(({}) => ({
     width: '100%',
     padding: '20px 10px',
     boxSizing: 'border-box',

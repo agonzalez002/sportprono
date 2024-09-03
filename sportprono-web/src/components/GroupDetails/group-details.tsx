@@ -1,3 +1,4 @@
+// @ts-ignore TS6133
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { StyledGroupDetails, StyledLink } from './StyledGroupDetails';
@@ -25,6 +26,8 @@ function GroupDetails() {
             await getGroup(id as string).then( data => {
                 setLoading(false);
                 setGroupDetail(data);
+            }).catch(e => {
+                setError(e);
             });
         };
         getData();

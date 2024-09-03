@@ -1,7 +1,7 @@
 import { styled } from "@mui/material";
 import { Link } from "react-router-dom";
 
-export const StyledGroupContent = styled('div')(({ theme }) => ({
+export const StyledGroupContent = styled('div')(({}) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'flex-start',

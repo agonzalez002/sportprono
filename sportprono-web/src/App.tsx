@@ -1,3 +1,4 @@
+// @ts-ignore TS6133
 import React, { useState } from 'react';
 import Header from './components/Header/header';
 import MainContent from './components/MainContent/main-content';
@@ -11,6 +12,7 @@ import './style.less';
 function App() {
   const [ theme, setTheme ] = useState(lightTheme);
 
+  // @ts-ignore TS6133
   const toogleTheme = () => {
     setTheme(theme.palette.mode === 'light' ? darkTheme : lightTheme);
   }
