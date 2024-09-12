@@ -1,7 +1,7 @@
 // @ts-ignore TS6133
 import React, { useState, useEffect } from 'react';
 import { StyledGroupContent, StyledLink } from './StyledGroupList';
-import { getGroups } from '../../services/groupServices';
+import useFetchGroups from '../../hooks/fetch-groups';
 
 interface Group {
   id: number,
@@ -12,22 +12,13 @@ interface Group {
 
 function GroupList() {
 
-  const [ groups, setGroups ] = useState<Group[] | null>(null);
-  const [ loading, setLoading ] = useState<boolean>(true);
-  const [ error, setError ] = useState<boolean | null>(null);
+  const [ groups, loading, error ] = useFetchGroups();
+  const [ groupsData, setGroupsData ] = useState<Group[] | null>(null);
   
   useEffect(() => {
-    setLoading(true);
-    const getData = async () => {
-        await getGroups().then( data => {
-          setLoading(false);
-          setGroups(data);
-      }).catch(e => {
-        setError(e);
-      });
-    };
-    getData();
-  }, []);
+    // @ts-ignore TS2345
+    setGroupsData(groups);
+  }, [groups]);
 
   if (error) {
     return <h1>Error !</h1>;
@@ -39,7 +30,7 @@ function GroupList() {
 
   return (
     <StyledGroupContent>
-      { groups && groups.map((group: Group) => {
+      { groupsData && groupsData.map((group: Group) => {
         return (
           <StyledLink key={group.id} to={`/details/${group.id}`}>
             {group.name} group

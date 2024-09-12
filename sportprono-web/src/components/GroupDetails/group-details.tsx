@@ -3,35 +3,37 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { StyledGroupDetails, StyledLink } from './StyledGroupDetails';
 import { ArrowBack } from '@mui/icons-material';
-import { getGroup } from '../../services/groupServices';
+import useFetchGroup from '../../hooks/fetch-group';
+import { DateTime } from 'luxon';
 
-interface Group {
+interface Event {
+    id: number,
+    team1: string,
+    team2: string,
+    time: string,
+    score1: number,
+    score2: number,
+    group: number,
+}
+
+interface GroupFull {
     id: number,
     name: string,
     location: string,
     description: string | null,
+    events: Event[],
   }
 
 function GroupDetails() {
 
     const { id } = useParams();
-
-    const [ groupDetails, setGroupDetail ] = useState<Group | null>(null);
-    const [ loading, setLoading ] = useState<boolean>(true);
-    const [ error, setError ] = useState<boolean | null>(null);
+    const [ groupDetails, loading, error ] = useFetchGroup(id);
+    const [ group, setGroup ] = useState<GroupFull | null>(null);
     
     useEffect(() => {
-        setLoading(true);
-        const getData = async () => {
-            await getGroup(id as string).then( data => {
-                setLoading(false);
-                setGroupDetail(data);
-            }).catch(e => {
-                setError(e);
-            });
-        };
-        getData();
-    }, []);
+        // @ts-ignore TS2345
+        setGroup(groupDetails);
+    }, [groupDetails]);
 
     if (error) {
         return <h1>Error !</h1>;
@@ -44,10 +46,26 @@ function GroupDetails() {
   return (
     <StyledGroupDetails>
         <StyledLink to="/"><ArrowBack />back</StyledLink>
-        <h1>Details here for group {id} !</h1>
-        <p>Name: {groupDetails?.name}</p>
-        <p>Description: {groupDetails?.description}</p>
-        <p>Location: {groupDetails?.location}</p>
+        { group && 
+            <>
+                <React.Fragment>
+                    <h1>Details here for group {id} !</h1>
+                    <p>Name: {group?.name}</p>
+                    <p>Description: {group?.description}</p>
+                    <p>Location: {group?.location}</p>
+                
+
+                    <h3>Evenst :</h3>
+                    { group.events.map( event => {
+                        const evtTime = DateTime.fromISO(event.time).setLocale("fr").setZone("Europe/Paris").toUTC();
+                        return <div key={event.id}>
+                            <p>{event.team1} VS {event.team2} on {evtTime.toLocaleString()} {evtTime.toFormat('HH:mm')}</p>
+                        </div>
+                    })}
+                </React.Fragment>
+            </>
+        }
+        
     </StyledGroupDetails>
   )
 }
