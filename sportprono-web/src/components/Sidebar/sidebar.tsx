@@ -1,15 +1,60 @@
 // @ts-ignore TS6133
-import React from 'react';
+import React, { useState } from 'react';
 import StyledSidebar from './StyledSidebar';
-import { Button } from '@mui/material';
+import { Box, Button, FormControl, IconButton, Input, InputAdornment, InputLabel, TextField } from '@mui/material';
+import { AccountCircle, Visibility, VisibilityOff } from '@mui/icons-material';
+import PasswordIcon from '@mui/icons-material/Password';
+import auth from '../../services/userServices';
+import { useAuth } from '../../hooks/useAuth';
 
 
 function SideBar() {
 
+  const [ username, setUsername ] = useState<string>('');
+  const [ password, setPassword ] = useState<string>('');
+  const [ showPassword, setShowPassword] = useState<boolean>(false);
+  const { authData, setAuthData } = useAuth();
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  }
+
+  const handleSubmit = async () => {
+    const data = await auth({username, password});
+    setAuthData(data);
+  }
+
   return (
     <StyledSidebar>
-      <h1>SideBar section</h1>
-      <Button variant='contained' color='primary'>Mon bouton</Button>
+        { authData && <p>{authData}</p>}
+        <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+            <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+            <TextField id="input-with-sx" label="Username" variant="standard" onChange={ e => setUsername(e.target.value) } />
+        </Box>
+
+        <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+            <PasswordIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+            <FormControl sx={{ m: 1, width: '25ch' }} variant="standard">
+              <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
+              <Input
+                id="standard-adornment-password"
+                type={showPassword ? 'text' : 'password'}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                onChange={ e => setPassword(e.target.value) }
+              />
+            </FormControl>
+        </Box>     
+        
+        <Button variant='contained' color='primary' onClick={handleSubmit}>Sign in</Button>
     </StyledSidebar>
   )
 }

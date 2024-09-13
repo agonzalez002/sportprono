@@ -1,4 +1,9 @@
 from django.db import models
+from django.contrib.auth.models import User
+
+
+def upload_path_handler(instance, filename):
+    return f"avatars/{instance.user.id}/{filename}"
 
 
 class Group(models.Model):
@@ -17,3 +22,9 @@ class Event(models.Model):
     score1 = models.IntegerField(null=True, blank=True)
     score2 = models.IntegerField(null=True, blank=True)
     group = models.ForeignKey(Group, related_name='events', on_delete=models.CASCADE)
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to=upload_path_handler, blank=True)
+

@@ -6,6 +6,7 @@ import SideBar from './components/Sidebar/sidebar';
 import { ThemeProvider } from '@mui/material';
 import { lightTheme, darkTheme } from './theme';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { AuthProvider } from './hooks/useAuth';
 import './style.less';
 
 
@@ -17,17 +18,22 @@ function App() {
     setTheme(theme.palette.mode === 'light' ? darkTheme : lightTheme);
   }
 
+  const user = "MyUser";
+
   return (
     <ThemeProvider theme={theme}>
-      <div className='App'>
-        <Router>
-          <Header />
-          <div className='content'>
-            <SideBar />
-            <MainContent />
-          </div>
-        </Router>
-      </div>
+      <AuthProvider user={user}>
+        <div className='App'>
+          <Router>
+            <Header />
+            <div className='content'>
+              <SideBar />
+              <MainContent />
+            </div>
+          </Router>
+        </div>
+      </AuthProvider>
+      
     </ThemeProvider>
   )
 }
