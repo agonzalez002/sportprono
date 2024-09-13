@@ -5,6 +5,8 @@ import { StyledGroupDetails, StyledLink } from './StyledGroupDetails';
 import { ArrowBack } from '@mui/icons-material';
 import useFetchGroup from '../../hooks/fetch-group';
 import { DateTime } from 'luxon';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 interface Event {
     id: number,
@@ -48,21 +50,19 @@ function GroupDetails() {
         <StyledLink to="/"><ArrowBack />back</StyledLink>
         { group && 
             <>
-                <React.Fragment>
-                    <h1>Details here for group {id} !</h1>
-                    <p>Name: {group?.name}</p>
-                    <p>Description: {group?.description}</p>
-                    <p>Location: {group?.location}</p>
-                
+                <h1>Details here for group {id} !</h1>
+                <p>Name: {group?.name}</p>
+                <p>Description: {group?.description}</p>
+                <p>Location: {group?.location}</p>
+            
 
-                    <h3>Evenst :</h3>
-                    { group.events.map( event => {
-                        const evtTime = DateTime.fromISO(event.time).setLocale("fr").setZone("Europe/Paris").toUTC();
-                        return <div key={event.id}>
-                            <p>{event.team1} VS {event.team2} on {evtTime.toLocaleString()} {evtTime.toFormat('HH:mm')}</p>
-                        </div>
-                    })}
-                </React.Fragment>
+                <h3>Evenst :</h3>
+                { group.events.map( event => {
+                    const evtTime = DateTime.fromISO(event.time).setLocale("fr").setZone("Europe/Paris").toUTC();
+                    return <div key={event.id}>
+                        <p>{event.team1} VS {event.team2} on <CalendarTodayIcon />{evtTime.toLocaleString()} <AccessTimeIcon />{evtTime.toFormat('HH:mm')}</p>
+                    </div>
+                })}
             </>
         }
         
