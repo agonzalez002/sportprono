@@ -9,6 +9,7 @@ from django.urls import re_path
 router = routers.DefaultRouter()
 router.register(r'groups', views.GroupViewset)
 router.register(r'events', views.EventViewset)
+router.register(r'users', views.UserViewSet)
 
 urlpatterns = [
     re_path('^', include(router.urls)),

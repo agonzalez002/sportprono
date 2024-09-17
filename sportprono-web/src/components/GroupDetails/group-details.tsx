@@ -7,30 +7,14 @@ import useFetchGroup from '../../hooks/fetch-group';
 import { DateTime } from 'luxon';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import { GroupFullType } from '../../interfaces';
 
-interface Event {
-    id: number,
-    team1: string,
-    team2: string,
-    time: string,
-    score1: number,
-    score2: number,
-    group: number,
-}
-
-interface GroupFull {
-    id: number,
-    name: string,
-    location: string,
-    description: string | null,
-    events: Event[],
-  }
 
 function GroupDetails() {
 
     const { id } = useParams();
     const [ groupDetails, loading, error ] = useFetchGroup(id);
-    const [ group, setGroup ] = useState<GroupFull | null>(null);
+    const [ group, setGroup ] = useState<GroupFullType | null>(null);
     
     useEffect(() => {
         // @ts-ignore TS2345

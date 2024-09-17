@@ -2,18 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import { StyledGroupContent, StyledLink } from './StyledGroupList';
 import useFetchGroups from '../../hooks/fetch-groups';
-
-interface Group {
-  id: number,
-  name: string,
-  location: string,
-  description: string | null,
-}
+import { GroupType } from '../../interfaces';
 
 function GroupList() {
 
   const [ groups, loading, error ] = useFetchGroups();
-  const [ groupsData, setGroupsData ] = useState<Group[] | null>(null);
+  const [ groupsData, setGroupsData ] = useState<GroupType[] | null>(null);
   
   useEffect(() => {
     // @ts-ignore TS2345
@@ -30,7 +24,7 @@ function GroupList() {
 
   return (
     <StyledGroupContent>
-      { groupsData && groupsData.map((group: Group) => {
+      { groupsData && groupsData.map((group: GroupType) => {
         return (
           <StyledLink key={group.id} to={`/details/${group.id}`}>
             {group.name} group

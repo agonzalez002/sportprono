@@ -1,15 +1,9 @@
 import { useEffect, useState } from "react";
 import { getGroups } from "../services/groupServices";
-
-interface Group {
-    id: number,
-    name: string,
-    location: string,
-    description: string | null,
-}
+import { GroupType } from "../interfaces";
 
 function useFetchGroups() {
-    const [ groups, setGroups ] = useState<Group[] | null>(null);
+    const [ groups, setGroups ] = useState<GroupType[] | null>(null);
     const [ loading, setLoading ] = useState<boolean>(true);
     // @ts-ignore TS6133
     const [ error, setError ] = useState<boolean | null>(null);

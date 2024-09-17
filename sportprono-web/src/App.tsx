@@ -18,7 +18,7 @@ function App() {
     setTheme(theme.palette.mode === 'light' ? darkTheme : lightTheme);
   }
 
-  const user = "MyUser";
+  const user = JSON.parse(localStorage.getItem('sportprono-user') as string);
 
   return (
     <ThemeProvider theme={theme}>
