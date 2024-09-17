@@ -38,3 +38,9 @@ export interface GroupType {
     location: string,
     description: string | null,
 }
+
+export interface UserDataSignUpType {
+    username: string | null;
+    email: string | null;
+    password: string | null;
+}

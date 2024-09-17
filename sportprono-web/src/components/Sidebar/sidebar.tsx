@@ -4,7 +4,7 @@ import StyledSidebar from './StyledSidebar';
 import { Box, Button, FormControl, IconButton, Input, InputAdornment, InputLabel, TextField } from '@mui/material';
 import { AccountCircle, Visibility, VisibilityOff } from '@mui/icons-material';
 import PasswordIcon from '@mui/icons-material/Password';
-import auth from '../../services/userServices';
+import { auth } from '../../services/userServices';
 import { useAuth } from '../../hooks/useAuth';
 import { Link } from 'react-router-dom';
 

@@ -2,14 +2,15 @@
 import React, { useState } from "react";
 import { AccountCircle, Visibility, VisibilityOff, AlternateEmail } from "@mui/icons-material";
 import { Box, Button, FormControl, IconButton, Input, InputAdornment, InputLabel, TextField } from "@mui/material";
+import { signUp } from "../../services/userServices";
 import PasswordIcon from '@mui/icons-material/Password';
 
 function SignUp() {
 
-    const [email, setEmail] = useState<string>();
-    const [username, setUsername] = useState<string>();
-    const [password, setPassword] = useState<string>();
-    const [password2, setPassword2] = useState<string>();
+    const [email, setEmail] = useState<string | null>(null);
+    const [username, setUsername] = useState<string | null>(null);
+    const [password, setPassword] = useState<string | null>(null);
+    const [password2, setPassword2] = useState<string | null>(null);
     const [ showPassword, setShowPassword] = useState<boolean>(false);
 
     const passwordMatch = () => {
@@ -22,7 +23,10 @@ function SignUp() {
 
     const handleSubmit = async () => {
         if (passwordMatch()) {
-            console.log('all good', username, password, email);
+          const signUpData = await signUp({username, password, email});
+          if (signUpData) {
+            console.log(signUpData);
+          }
         } else {
             console.log("password don't match");
         }

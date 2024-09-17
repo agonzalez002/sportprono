@@ -27,4 +27,7 @@ class Event(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
     image = models.ImageField(upload_to=upload_path_handler, blank=True)
+    is_premium = models.BooleanField(default=False)
+    bio = models.CharField(max_length=256, blank=True, null=True)
+    
 
