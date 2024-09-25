@@ -7,6 +7,7 @@ import PasswordIcon from '@mui/icons-material/Password';
 import { auth } from '../../services/userServices';
 import { useAuth } from '../../hooks/useAuth';
 import { Link } from 'react-router-dom';
+import User from '../User/user';
 
 
 function SideBar() {
@@ -66,7 +67,7 @@ function SideBar() {
           </>
           :
           <>
-            <p>{authData.user.username}</p>
+            <User user={authData.user} />
             <Button variant='outlined' color='primary' onClick={handleLogOut}>Log Out</Button>
           </>
         }

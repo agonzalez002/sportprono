@@ -4,8 +4,15 @@ import { AccountCircle, Visibility, VisibilityOff, AlternateEmail } from "@mui/i
 import { Box, Button, FormControl, IconButton, Input, InputAdornment, InputLabel, TextField } from "@mui/material";
 import { signUp } from "../../services/userServices";
 import PasswordIcon from '@mui/icons-material/Password';
+import { auth } from '../../services/userServices';
+import { useAuth } from '../../hooks/useAuth';
+import { useNavigate } from "react-router-dom";
 
 function SignUp() {
+
+    const navigate = useNavigate();
+    // @ts-ignore TS6133
+    const { setAuth } = useAuth();
 
     const [email, setEmail] = useState<string | null>(null);
     const [username, setUsername] = useState<string | null>(null);
@@ -25,7 +32,9 @@ function SignUp() {
         if (passwordMatch()) {
           const signUpData = await signUp({username, password, email});
           if (signUpData) {
-            console.log(signUpData);
+            const data = await auth({username, password});
+            setAuth(data);
+            navigate('/my-account');
           }
         } else {
             console.log("password don't match");

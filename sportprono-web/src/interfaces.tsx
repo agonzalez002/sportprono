@@ -44,3 +44,22 @@ export interface UserDataSignUpType {
     email: string | null;
     password: string | null;
 }
+
+export interface UserDataType {
+    user: {
+        email: string,
+        id: number,
+        profile: {
+            id: number,
+            image: string,
+            is_premium: boolean,
+            bio: string,
+        },
+        username: string,
+    }
+}
+
+export interface ChangePasswordType {
+    old_password: string | undefined,
+    new_password: string | undefined,
+}

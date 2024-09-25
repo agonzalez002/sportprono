@@ -27,7 +27,7 @@ class GroupFullSerializer(serializers.ModelSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ('image', 'is_premium', 'bio')
+        fields = ('id', 'image', 'is_premium', 'bio')
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -50,3 +50,7 @@ class UserSerializer(serializers.ModelSerializer):
             UserProfile.objects.create(user=user, **profile_data)
         Token.objects.create(user=user)
         return user
+    
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)

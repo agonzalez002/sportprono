@@ -1,10 +1,11 @@
 from django.contrib.auth.models import User
 from .models import Group, Event, UserProfile
-from rest_framework import viewsets
+from rest_framework import viewsets, status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
-from .serializers import GroupSerializer, EventSerializer, GroupFullSerializer, UserSerializer, UserProfileSerializer
+from .serializers import GroupSerializer, EventSerializer, GroupFullSerializer, UserSerializer, UserProfileSerializer, ChangePasswordSerializer
 
 
 class GroupViewset(viewsets.ModelViewSet):
@@ -39,3 +40,15 @@ class UserProfileViewset(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+    @action(methods=['PUT'], detail=True, serializer_class=ChangePasswordSerializer)
+    def change_password(self, request, pk):
+        user = User.objects.get(pk=pk)
+        serializer = ChangePasswordSerializer(data=request.data)
+
+        if serializer.is_valid():
+            if not user.check_password(serializer.data.get('old_password')):
+                return Response({'message': "Wrong old password"}, status=status.HTTP_400_BAD_REQUEST)
+            user.set_password(serializer.data.get('new_password'))
+            user.save()
+            return Response({'message': 'Password updated'}, status=status.HTTP_200_OK)

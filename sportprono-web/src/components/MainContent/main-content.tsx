@@ -5,6 +5,7 @@ import GroupList from '../GroupList/group-list';
 import StyledMainContent from './StyledMainContent';
 import GroupDetails from '../GroupDetails/group-details';
 import SignUp from '../SignUp/signUp';
+import Account from '../Account/account';
 
 function MainContent() {
 
@@ -14,6 +15,7 @@ function MainContent() {
         <Route path='/' element={<GroupList />} />
         <Route path='/details/:id' element={<GroupDetails />} />
         <Route path='/signup' element={<SignUp />} />
+        <Route path='/my-account' element={<Account />} />
       </Routes>
     </StyledMainContent>
   )

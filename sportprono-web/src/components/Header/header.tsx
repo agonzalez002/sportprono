@@ -20,7 +20,12 @@ function Header() {
 
   return (
     <StyledHeader>
-      <img src={logoSrc} alt='SportProno logo' height="75" onClick={handleGoHome} />
+      <img 
+        src={logoSrc} 
+        alt='SportProno logo' 
+        height="75" 
+        onClick={() => { navigate('/') }}
+      />
     </StyledHeader>
   )
 }

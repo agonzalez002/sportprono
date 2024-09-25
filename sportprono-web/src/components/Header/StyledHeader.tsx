@@ -5,6 +5,9 @@ const StyledHeader = styled('div')(({ theme }) => ({
     height: '80px',
     borderBottom: `5px solid ${theme.palette.primary.main}`,
     padding: '5px 20px',
+    img: {
+        ":hover": {cursor: "pointer"},
+    }
 }));
 
 export default StyledHeader;
