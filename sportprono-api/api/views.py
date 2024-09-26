@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from .models import Group, Event, UserProfile
 from rest_framework import viewsets, status
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -11,6 +13,9 @@ from .serializers import GroupSerializer, EventSerializer, GroupFullSerializer, 
 class GroupViewset(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+
 
     def retrieve(self, request, *args, **kwargs): 
         instance = self.get_object()
@@ -21,6 +26,9 @@ class GroupViewset(viewsets.ModelViewSet):
 class EventViewset(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
 
 
 class CustomObtainAuthToken(ObtainAuthToken):
@@ -35,13 +43,18 @@ class CustomObtainAuthToken(ObtainAuthToken):
 class UserProfileViewset(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
 
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (AllowAny,)
 
-    @action(methods=['PUT'], detail=True, serializer_class=ChangePasswordSerializer)
+    @action(methods=['PUT'], detail=True, serializer_class=ChangePasswordSerializer, permission_classes=[IsAuthenticated])
     def change_password(self, request, pk):
         user = User.objects.get(pk=pk)
         serializer = ChangePasswordSerializer(data=request.data)

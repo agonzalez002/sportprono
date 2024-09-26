@@ -5,6 +5,7 @@ import { Box, Button, FormControl, IconButton, Input, InputAdornment, InputLabel
 import { uploadAvatar, changePassword } from "../../services/userServices";
 import PasswordIcon from '@mui/icons-material/Password';
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { toast } from 'react-toastify';
 
 function Account() {
     // @ts-ignore TS6133
@@ -30,7 +31,16 @@ function Account() {
 
     const handleChangePassword = async () => {
         if (passwordMatch()) {
-            await changePassword({old_password: oldPassword, new_password: newPassword1}, authData.user.id);
+            const passwordData = await changePassword(
+                {old_password: oldPassword, new_password: newPassword1}, 
+                authData.user.id,
+                authData.token,
+            );
+            if (passwordData) {
+                toast.success("Password changed !")
+            }
+        } else {
+            toast.warning("Password don't match");
         }
     }
 

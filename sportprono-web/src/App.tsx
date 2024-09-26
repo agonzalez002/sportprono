@@ -7,7 +7,9 @@ import { ThemeProvider } from '@mui/material';
 import { lightTheme, darkTheme } from './theme';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { AuthProvider } from './hooks/useAuth';
+import { Bounce, ToastContainer } from 'react-toastify';
 import './style.less';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {
@@ -32,6 +34,15 @@ function App() {
             </div>
           </Router>
         </div>
+        <ToastContainer 
+          position='top-right'
+          autoClose={5000}
+          hideProgressBar={false}
+          closeOnClick
+          pauseOnHover
+          theme='colored'
+          transition={Bounce}
+        />
       </AuthProvider>
       
     </ThemeProvider>

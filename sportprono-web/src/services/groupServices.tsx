@@ -1,6 +1,8 @@
+import status from "../utils";
+
 export function getGroup(id: string) {
     return fetch(`http://127.0.0.1:8000/api/groups/${id}/`)
-    .then(resp => resp.json())
+    .then(status)
     .catch(e => {
         console.log(e);
     })
@@ -8,7 +10,7 @@ export function getGroup(id: string) {
 
 export function getGroups() {
     return fetch('http://127.0.0.1:8000/api/groups/')
-    .then(resp => resp.json())
+    .then(status)
     .catch(e => {
         console.log(e);
     });
