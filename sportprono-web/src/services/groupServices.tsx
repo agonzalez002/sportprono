@@ -15,3 +15,33 @@ export function getGroups() {
         console.log(e);
     });
 };
+
+export function joinGroup(data: {group: number, user: number}, token: string) {
+    return fetch(`http://localhost:8000/api/members/join/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Token ${token}`,
+        },
+        body: JSON.stringify(data)
+    })
+    .then(status)
+    .catch(e => {
+        console.log(e);
+    });
+}
+
+export function leaveGroup(data: {group: number, user: number}, token: string) {
+    return fetch(`http://localhost:8000/api/members/leave/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Token ${token}`,
+        },
+        body: JSON.stringify(data)
+    })
+    .then(status)
+    .catch(e => {
+        console.log(e);
+    });
+}

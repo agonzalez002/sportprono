@@ -29,5 +29,15 @@ class UserProfile(models.Model):
     image = models.ImageField(upload_to=upload_path_handler, blank=True)
     is_premium = models.BooleanField(default=False)
     bio = models.CharField(max_length=256, blank=True, null=True)
-    
 
+
+class Member(models.Model):
+    group = models.ForeignKey(Group, related_name='members', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='members_of', on_delete=models.CASCADE)
+    admin = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = (('user', 'group'),)
+        indexes = [
+            models.Index(fields=['user', 'group']),
+        ]

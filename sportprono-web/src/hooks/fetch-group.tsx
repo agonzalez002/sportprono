@@ -5,7 +5,7 @@ import { GroupType } from "../interfaces";
 
 function useFetchGroup(groupId: string | undefined) {
 
-    const [ groupDetails, setGroupDetail ] = useState<GroupType | null>(null);
+    const [ groupDetails, setGroupDetail ] = useState<GroupType>();
     const [ loading, setLoading ] = useState<boolean>(true);
     // @ts-ignore TS6133
     const [ error, setError ] = useState<boolean | null>(null);

@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from .models import Group, Event, UserProfile
+from .models import Group, Event, UserProfile, Member
 from rest_framework import viewsets, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
@@ -7,7 +7,15 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
-from .serializers import GroupSerializer, EventSerializer, GroupFullSerializer, UserSerializer, UserProfileSerializer, ChangePasswordSerializer
+from .serializers import (
+    GroupSerializer, 
+    EventSerializer, 
+    GroupFullSerializer, 
+    UserSerializer, 
+    UserProfileSerializer, 
+    ChangePasswordSerializer,
+    MemberSerializer,
+)
 
 
 class GroupViewset(viewsets.ModelViewSet):
@@ -65,3 +73,40 @@ class UserViewSet(viewsets.ModelViewSet):
             user.set_password(serializer.data.get('new_password'))
             user.save()
             return Response({'message': 'Password updated'}, status=status.HTTP_200_OK)
+
+
+class MemberViewSet(viewsets.ModelViewSet):
+    queryset = Member.objects.all()
+    serializer_class = MemberSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    @action(methods=['POST'], detail=False)
+    def join(self, request):
+        if 'group' in request.data and 'user' in request.data:
+            group = Group.objects.get(id=request.data['group'])
+            user = User.objects.get(id=request.data['user'])
+
+            member, created = Member.objects.get_or_create(group=group, user=user)
+            serializer = MemberSerializer(member, many=False)
+            message = 'Joined group' if created else 'User allready in this group'
+            type = 'success' if created else 'warning'
+            response = {'message': message, 'results': serializer.data, 'type': type}
+            return Response(response, status=status.HTTP_200_OK)
+        else:
+            response = {'message': 'Wrongs params'}
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        
+    @action(methods=['POST'], detail=False)
+    def leave(self, request):
+        if 'group' in request.data and 'user' in request.data:
+            group = Group.objects.get(id=request.data['group'])
+            user = User.objects.get(id=request.data['user'])
+
+            member = Member.objects.get(group=group, user=user)
+            member.delete()
+            response = {'message': 'Leave group'}
+            return Response(response, status=status.HTTP_200_OK)
+        else:
+            response = {'message': 'Wrongs params'}
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)

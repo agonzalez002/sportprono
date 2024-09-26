@@ -24,12 +24,19 @@ export interface EventType {
     group: number;
 }
 
+export interface MemberType {
+    admin: boolean;
+    points: number;
+    user: UserDataType;
+}
+
 export interface GroupFullType {
     id: number;
     name: string;
     location: string;
     description: string | null;
     events: EventType[];
+    members: MemberType[];
 }
 
 export interface GroupType {
@@ -46,17 +53,15 @@ export interface UserDataSignUpType {
 }
 
 export interface UserDataType {
-    user: {
-        email: string,
+    email: string,
+    id: number,
+    profile: {
         id: number,
-        profile: {
-            id: number,
-            image: string,
-            is_premium: boolean,
-            bio: string,
-        },
-        username: string,
-    }
+        image: string,
+        is_premium: boolean,
+        bio: string,
+    },
+    username: string,
 }
 
 export interface ChangePasswordType {

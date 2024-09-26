@@ -3,11 +3,15 @@ import { UserDataType } from '../../interfaces';
 import { Avatar } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-function User({user}: UserDataType) {
+interface UserProps {
+    user: UserDataType;
+}
+
+function User({ user }: UserProps) {
 
     const navigate = useNavigate();
 
-    const [ imageUrl, setImageUrl ] = useState<string>();
+    const [ imageUrl, setImageUrl ] = useState<string>('');
 
     useEffect(() => {
         if (user.profile.image) {
@@ -15,7 +19,7 @@ function User({user}: UserDataType) {
         } else {
             setImageUrl("/mediafiles/male.png");
         }
-    }, []);
+    }, [user]);
 
     return (
         <>
