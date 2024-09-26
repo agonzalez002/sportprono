@@ -4,9 +4,6 @@ import { useParams } from 'react-router-dom';
 import { StyledGroupDetails, StyledLink } from './StyledGroupDetails';
 import { ArrowBack } from '@mui/icons-material';
 import useFetchGroup from '../../hooks/fetch-group';
-import { DateTime } from 'luxon';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AddIcon from '@mui/icons-material/Add';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { GroupFullType } from '../../interfaces';
@@ -15,6 +12,7 @@ import { Button } from '@mui/material';
 import { joinGroup, leaveGroup } from '../../services/groupServices';
 import { useAuth } from '../../hooks/useAuth';
 import { toast } from 'react-toastify';
+import EventList from '../EventList/event-list';
 
 
 function GroupDetails() {
@@ -79,21 +77,12 @@ function GroupDetails() {
                     <Button onClick={() => join()} variant='contained' color='primary'><AddIcon /> Join</Button> 
                 }
                 
-                
-
                 <h1>Details here for group {id} !</h1>
                 <p>Name: {group?.name}</p>
                 <p>Description: {group?.description}</p>
                 <p>Location: {group?.location}</p>
-            
 
-                <h3>Evenst :</h3>
-                { group.events.map( event => {
-                    const evtTime = DateTime.fromISO(event.time).setLocale("fr").setZone("Europe/Paris").toUTC();
-                    return <div key={event.id}>
-                        <p>{event.team1} VS {event.team2} on <CalendarTodayIcon />{evtTime.toLocaleString()} <AccessTimeIcon />{evtTime.toFormat('HH:mm')}</p>
-                    </div>
-                })}
+                <EventList events={group.events}/>
 
                 <h3>Members :</h3>
                 { group.members.map( member => {

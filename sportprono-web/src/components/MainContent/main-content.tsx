@@ -6,6 +6,7 @@ import StyledMainContent from './StyledMainContent';
 import GroupDetails from '../GroupDetails/group-details';
 import SignUp from '../SignUp/signUp';
 import Account from '../Account/account';
+import EventDetails from '../EventDetails/event-details';
 
 function MainContent() {
 
@@ -16,6 +17,7 @@ function MainContent() {
         <Route path='/details/:id' element={<GroupDetails />} />
         <Route path='/signup' element={<SignUp />} />
         <Route path='/my-account' element={<Account />} />
+        <Route path='/event/:id' element={<EventDetails />} />
       </Routes>
     </StyledMainContent>
   )
