@@ -67,7 +67,7 @@ function SideBar() {
           </>
           :
           <>
-            <User user={authData.user} />
+            <User user={authData.user} accessAccount />
             <Button variant='outlined' color='primary' onClick={handleLogOut}>Log Out</Button>
           </>
         }

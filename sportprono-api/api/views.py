@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from .models import Group, Event, UserProfile, Member
+from .models import Group, Event, UserProfile, Member, Bet
 from rest_framework import viewsets, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
@@ -15,6 +15,8 @@ from .serializers import (
     UserProfileSerializer, 
     ChangePasswordSerializer,
     MemberSerializer,
+    EventFullSerializer,
+    BetSerializer,
 )
 
 
@@ -36,6 +38,11 @@ class EventViewset(viewsets.ModelViewSet):
     serializer_class = EventSerializer
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
+
+    def retrieve(self, request, *args, **kwargs): 
+        instance = self.get_object()
+        serializer = EventFullSerializer(instance, many=False, context={'request': request})
+        return Response(serializer.data)
 
 
 
@@ -110,3 +117,16 @@ class MemberViewSet(viewsets.ModelViewSet):
         else:
             response = {'message': 'Wrongs params'}
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        
+
+class BetViewSet(viewsets.ModelViewSet):
+    queryset = Bet.objects.all()
+    serializer_class = BetSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def retrieve(self, request, *args, **kwargs): 
+        instance = self.get_object()
+        serializer = EventFullSerializer(instance, many=False, context={'request': request})
+        return Response(serializer.data)
+

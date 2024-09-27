@@ -6,7 +6,7 @@ import { ArrowBack } from '@mui/icons-material';
 import useFetchGroup from '../../hooks/fetch-group';
 import AddIcon from '@mui/icons-material/Add';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { GroupFullType } from '../../interfaces';
+import { GroupFullType, MemberType } from '../../interfaces';
 import User from '../User/user';
 import { Button } from '@mui/material';
 import { joinGroup, leaveGroup } from '../../services/groupServices';
@@ -25,15 +25,15 @@ function GroupDetails() {
     const [ inGroup, setInGroup ] = useState<boolean>(false);
     
     useEffect(() => {
-        if (groupDetails) {
+        if (groupDetails && typeof groupDetails !== 'boolean') {
             if (groupDetails.members) {
                 if (authData?.user) {
-                    setInGroup(!!groupDetails.members.find( member => member.user.id === authData.user.id));
+                    setInGroup(!!groupDetails.members.find( (member: MemberType) => member.user.id === authData.user.id));
                 }
             }
             setGroup(groupDetails);
         }
-    }, [groupDetails]);
+    }, [groupDetails, authData]);
 
     if (error) {
         return <h1>Error !</h1>;
@@ -87,7 +87,7 @@ function GroupDetails() {
                 <h3>Members :</h3>
                 { group.members.map( member => {
                     return <div key={member.user.id}>
-                        <User user={member.user} />
+                        <User user={member.user} accessAccount={false} />
                         <p>{member.points} pts</p>
                     </div>
                 })}

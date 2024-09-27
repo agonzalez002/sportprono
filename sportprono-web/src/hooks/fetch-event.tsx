@@ -5,7 +5,7 @@ import { EventType } from "../interfaces";
 
 function useFetchEvent(eventId: string | undefined, token: string) {
 
-    const [ eventDetails, setEventDetail ] = useState<EventType>();
+    const [ eventDetails, setEventDetail ] = useState<EventType | null>(null);
     const [ loading, setLoading ] = useState<boolean>(true);
     // @ts-ignore TS6133
     const [ error, setError ] = useState<boolean | null>(null);

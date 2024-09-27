@@ -1,3 +1,4 @@
+// @ts-ignore TS6133
 import React from 'react';
 import { DateTime } from 'luxon';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';

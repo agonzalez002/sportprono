@@ -41,3 +41,17 @@ class Member(models.Model):
         indexes = [
             models.Index(fields=['user', 'group']),
         ]
+
+
+class Bet(models.Model):
+    user = models.ForeignKey(User, related_name='user_bet', on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, related_name='bets', on_delete=models.CASCADE)
+    score1 = models.IntegerField(null=True, blank=True)
+    score2 = models.IntegerField(null=True, blank=True)
+    points = models.IntegerField(default=None, null=True, blank=True)
+
+    class Meta:
+        unique_together = (('user', 'event'),)
+        indexes = [
+            models.Index(fields=['user', 'event']),
+        ]

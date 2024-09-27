@@ -5,6 +5,7 @@ export interface UserType {
         username: string;
         profile: {
             image: string;
+            image_url: string;
         };
     };
 }
@@ -12,6 +13,14 @@ export interface UserType {
 export interface AuthContextType {
     authData: UserType;
     setAuth: (newUser: UserType) => void;
+}
+
+export interface BetType {
+    id: number;
+    user: UserDataType;
+    event: number;
+    score1: number;
+    score2: number;
 }
 
 export interface EventType {
@@ -22,6 +31,7 @@ export interface EventType {
     score1: number;
     score2: number;
     group: number;
+    bets: BetType[];
 }
 
 export interface MemberType {
@@ -58,6 +68,7 @@ export interface UserDataType {
     profile: {
         id: number,
         image: string,
+        image_url: string,
         is_premium: boolean,
         bio: string,
     },

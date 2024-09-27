@@ -2,14 +2,26 @@ from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
 from django.contrib.auth.models import User
+from django.conf import settings
 
 from ...models import UserProfile
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    image_url = serializers.SerializerMethodField()
+
     class Meta:
         model = UserProfile
-        fields = ('id', 'image', 'is_premium', 'bio')
+        fields = ('id', 'image', 'image_url', 'is_premium', 'bio')
+
+    def get_image_url(self, obj):
+        request = self.context.get('request')
+        if obj.image:
+            if request is not None:
+                return request.build_absolute_uri(obj.image.url)
+            else:
+                return f"{settings.SITE_URL}{obj.image.url}"
+        return None
 
 
 class UserSerializer(serializers.ModelSerializer):

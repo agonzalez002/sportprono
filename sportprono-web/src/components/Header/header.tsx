@@ -14,10 +14,6 @@ function Header() {
 
   const logoSrc = theme.palette.mode === 'dark' ? darkLogo : logoLight;
 
-  const handleGoHome = () => {
-    navigate('/');
-  }
-
   return (
     <StyledHeader>
       <img 
