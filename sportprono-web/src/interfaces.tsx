@@ -79,3 +79,9 @@ export interface ChangePasswordType {
     old_password: string | undefined,
     new_password: string | undefined,
 }
+
+export interface PlaceBetType {
+    event_id: number;
+    score1: string;
+    score2: string;
+}

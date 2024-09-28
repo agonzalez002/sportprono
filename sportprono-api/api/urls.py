@@ -9,6 +9,7 @@ from django.urls import re_path
 router = routers.DefaultRouter()
 router.register(r'groups', views.GroupViewset)
 router.register(r'events', views.EventViewset)
+router.register(r'bets', views.BetViewSet)
 router.register(r'users', views.UserViewSet)
 router.register(r'profile', views.UserProfileViewset)
 router.register(r'members', views.MemberViewSet)
