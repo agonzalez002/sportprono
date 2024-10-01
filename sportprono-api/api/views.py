@@ -19,6 +19,9 @@ from .serializers import (
     EventFullSerializer,
     BetSerializer,
 )
+import logging
+
+LOG = logging.getLogger(__name__)
 
 
 class GroupViewset(viewsets.ModelViewSet):
@@ -44,6 +47,17 @@ class EventViewset(viewsets.ModelViewSet):
         instance = self.get_object()
         serializer = EventFullSerializer(instance, many=False, context={'request': request})
         return Response(serializer.data)
+    
+    @action(methods=['PUT'], detail=False, permission_classes=[IsAuthenticated], url_path='set_scores')
+    def set_scores(self, request):
+        for event_id, scores in request.data.items():
+            event = Event.objects.get(id=event_id)
+            event.score1 = scores.get('score1', None)
+            event.score2 = scores.get('score2', None)
+            event.save()
+            print(event.score1, flush=True)
+        return Response({'message': 'Scores updated !'}, status=status.HTTP_200_OK)
+
 
 
 
@@ -142,7 +156,7 @@ class BetViewSet(viewsets.ModelViewSet):
 
             in_group = Member.objects.filter(user=request.user, group=event.group).exists()
 
-            if event.time < timezone.now() and in_group:
+            if event.time > timezone.now() and in_group:
                 score1 = request.data['score1']
                 score2 = request.data['score2']
 

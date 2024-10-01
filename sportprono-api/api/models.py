@@ -23,6 +23,9 @@ class Event(models.Model):
     score2 = models.IntegerField(null=True, blank=True)
     group = models.ForeignKey(Group, related_name='events', on_delete=models.CASCADE)
 
+    class Meta:
+        unique_together = (('team1', 'team2', 'time', 'group'))
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)

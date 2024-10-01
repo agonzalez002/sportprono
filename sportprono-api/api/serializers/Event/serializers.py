@@ -6,7 +6,7 @@ from ...models import Event
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
-        fields = ('id', 'team1', 'team2', 'time')
+        fields = ('id', 'team1', 'team2', 'time', 'group', 'score1', 'score2')
 
 
 class EventFullSerializer(serializers.ModelSerializer):

@@ -22,6 +22,8 @@ function EventDetails() {
     const [ eventDetails, loading, error ] = useFetchEvent(id, authData.token);
     const [ event, setEvent ] = useState<EventType>();
     const [ evtTime, setEvtTime ] = useState<DateTime>(DateTime.fromISO("2000-01-01T00:00:00"));
+    const [ isFutureEvent, setIsFutureEvent ] = useState<boolean>(false);
+    const [ timeDiff, setTimeDiff ] = useState<string>('');
     const [ score1, setScore1 ] = useState<string>('');
     const [ score2, setScore2 ] = useState<string>('');
 
@@ -31,6 +33,8 @@ function EventDetails() {
             if (eventDetails?.time) {
                 const time = DateTime.fromISO(eventDetails.time).setLocale("fr").setZone("Europe/Paris").toUTC();
                 setEvtTime(time);
+                setIsFutureEvent(time > DateTime.now());
+                setTimeDiff(time.toRelative() ?? "")
             }
         }
     }, [eventDetails, authData]);
@@ -74,31 +78,37 @@ function EventDetails() {
                     <p><CalendarTodayIcon />{evtTime.toLocaleString()} <AccessTimeIcon />{evtTime.toFormat('HH:mm')}</p>
                     <h1>{event.team1} VS {event.team2}</h1>
                     <h2>{event.score1} - {event.score2}</h2>
-                    <hr></hr>
-                    <br />
-                    <>
-
-                        <TextField 
-                            id="score1" 
-                            label="Score Team 1" 
-                            variant="standard" 
-                            type='number'
-                            value={score1}
-                            onChange={ e => setScore1(e.target.value) }
-                            inputProps={{ min: 0 }}
-                        />
+                    {
+                        isFutureEvent ?
+                        <>
+                            <hr></hr>
+                            <br />
+                            <TextField 
+                                id="score1" 
+                                label="Score Team 1" 
+                                variant="standard" 
+                                type='number'
+                                value={score1}
+                                onChange={ e => setScore1(e.target.value) }
+                                inputProps={{ min: 0 }}
+                            />
+                            :
+                            <TextField 
+                                id="score2"
+                                label="Score Team 2"
+                                variant="standard"
+                                type='number'
+                                value={score2}
+                                onChange={ e => setScore2(e.target.value) }
+                                inputProps={{ min: 0 }}
+                            />
+                            <Button variant='contained' color='primary' onClick={saveBet} disabled={!score1 || !score2}>Save</Button>
+                        </> 
                         :
-                        <TextField 
-                            id="score2"
-                            label="Score Team 2"
-                            variant="standard"
-                            type='number'
-                            value={score2}
-                            onChange={ e => setScore2(e.target.value) }
-                            inputProps={{ min: 0 }}
-                        />
-                        <Button variant='contained' color='primary' onClick={saveBet} disabled={!score1 || !score2}>Save</Button>
-                    </>
+                        <>
+                            <p>Match joué {timeDiff}</p>
+                        </>
+                    }
                     <hr></hr>
                     <br />
                     {

@@ -23,6 +23,13 @@ export interface BetType {
     score2: number;
 }
 
+export interface ShortEventType {
+    team1: string;
+    team2: string;
+    time: string;
+    group: number;
+}
+
 export interface EventType {
     id: number;
     team1: string;
@@ -84,4 +91,11 @@ export interface PlaceBetType {
     event_id: number;
     score1: string;
     score2: string;
+}
+
+export interface ScoresType {
+    [key: number]: {
+        score1: number;
+        score2: number;
+    };
 }
