@@ -29,9 +29,12 @@ export function signUp(userData: UserDataSignUpType) {
     });
 }
 
-export function uploadAvatar(profileId: number, data: any) {
+export function uploadAvatar(profileId: number, data: any, token: string) {
     return fetch(`http://localhost:8000/api/profile/${profileId}/`, {
         method: 'PUT',
+        headers: {
+            'Authorization': `Token ${token}`,
+        },
         body: data,
     })
     .then(status)

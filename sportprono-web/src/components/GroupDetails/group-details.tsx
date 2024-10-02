@@ -8,13 +8,14 @@ import AddIcon from '@mui/icons-material/Add';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { GroupFullType, MemberType } from '../../interfaces';
 import User from '../User/user';
-import { Button } from '@mui/material';
+import { Badge, Button } from '@mui/material';
 import { joinGroup, leaveGroup } from '../../services/groupServices';
 import { useAuth } from '../../hooks/useAuth';
 import { toast } from 'react-toastify';
 import EventList from '../EventList/event-list';
 import { StyledLink } from '../../globalStyled';
 import SettingsIcon from '@mui/icons-material/Settings';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 
 
 function GroupDetails() {
@@ -27,10 +28,36 @@ function GroupDetails() {
     const [ group, setGroup ] = useState<GroupFullType | null>(null);
     const [ inGroup, setInGroup ] = useState<boolean>(false);
     const [ isAdmin, setIsAdmin ] = useState<boolean>(false);
+
+    const trophyColor = {
+        'gold': '#FFD700',
+        'silver': '#C0C0C0',
+        'bronze': '#CD7F32',
+    }
     
     useEffect(() => {
         if (groupDetails && typeof groupDetails !== 'boolean') {
             if (groupDetails.members) {
+
+                groupDetails.members.sort((a,b) => b.points - a.points);
+                const availableTrophies = ['gold', 'silver', 'bronze'];
+                let currentTrophy = 0;
+                groupDetails.members.map( (m, index) => {
+                    if (index === 0) {
+                        // @ts-ignore TS6133
+                        m.trophy = availableTrophies[currentTrophy];
+                    } else {
+                        if (m.points !== groupDetails.members[index-1].points) {
+                            currentTrophy++;
+                        }
+                        if (currentTrophy < availableTrophies.length) {
+                            // @ts-ignore TS6133
+                            m.trophy = availableTrophies[currentTrophy];
+                        }
+                    }
+                    
+                })
+
                 if (authData?.user) {
                     setInGroup(!!groupDetails.members.find( (member: MemberType) => member.user.id === authData.user.id));
                     setIsAdmin(!!groupDetails.members.find( (member: MemberType) => member.user.id === authData.user.id)?.admin);
@@ -98,7 +125,14 @@ function GroupDetails() {
                 <h3>Members :</h3>
                 { group.members.map( member => {
                     return <div key={member.user.id}>
-                        <User user={member.user} accessAccount={false} />
+                        <Badge 
+                            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                            badgeContent={
+                                !!member.trophy && <EmojiEventsIcon sx={{ color: trophyColor[member.trophy] }} />
+                            } 
+                        >
+                            <User user={member.user} accessAccount={false} />
+                        </Badge>                  
                         <p>{member.points} pts</p>
                     </div>
                 })}

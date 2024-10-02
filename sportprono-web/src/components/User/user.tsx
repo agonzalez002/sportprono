@@ -16,7 +16,7 @@ function User({ user, accessAccount }: UserProps, ) {
     const [ imageUrl, setImageUrl ] = useState<string>('');
 
     useEffect(() => {
-        if (user.profile.image) {
+        if (user.profile && user.profile.image) {
             setImageUrl(user.profile.image_url);
         } else {
             setImageUrl("/mediafiles/male.png");

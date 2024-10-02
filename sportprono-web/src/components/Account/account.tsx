@@ -22,7 +22,11 @@ function Account() {
         if (image) {
             uploadData.append('image', image, image.name);
         }
-        await uploadAvatar(authData.user.profile.id, uploadData);
+        console.log(uploadData);
+        const uploaded = await uploadAvatar(authData.user.profile.id, uploadData, authData.token);
+        if (uploaded) {
+            toast.success("Image uploaded");
+        }
     }
 
     const passwordMatch = () => {

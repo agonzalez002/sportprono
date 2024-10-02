@@ -10,7 +10,6 @@ import 'dayjs/locale/fr';
 import { createEvent } from '../../services/eventServices';
 import { useAuth } from '../../hooks/useAuth';
 import { toast } from 'react-toastify';
-import { DateTime } from 'luxon';
 import { StyledLink } from '../../globalStyled';
 import { ArrowBack } from '@mui/icons-material';
 import EventScroreList from '../EventList/event-score-list';

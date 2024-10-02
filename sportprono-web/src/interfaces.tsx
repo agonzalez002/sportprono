@@ -45,6 +45,7 @@ export interface MemberType {
     admin: boolean;
     points: number;
     user: UserDataType;
+    trophy?: 'gold' | 'silver' | 'bronze';
 }
 
 export interface GroupFullType {

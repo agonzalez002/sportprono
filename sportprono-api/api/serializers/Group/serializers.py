@@ -4,6 +4,8 @@ from ...models import Group, Bet
 from ..Event.serializers import EventSerializer
 from ..Member.serializers import MemberSerializer
 
+from django.db.models import Sum
+
 
 class GroupSerializer(serializers.ModelSerializer):    
     class Meta:
@@ -24,16 +26,13 @@ class GroupFullSerializer(serializers.ModelSerializer):
         members = obj.members.all()
 
         for member in members:
-            points = 0
+            points = Bet.objects.filter(event__group=obj, user=member.user.id).aggregate(
+                pts=Sum('points')
+            )
             member_serialized = MemberSerializer(member, many=False)
             member_data = member_serialized.data
-            member_bets = Bet.objects.filter(user_id=member_data["user"].get('id'))
-            for bet in member_bets:
-                if bet.points:
-                    points += bet.points 
-            member_data['points'] = points
+            member_data['points'] = points['pts'] or 0
             member_data.pop('group')
-
             people_points.append(member_data)
 
         return people_points

@@ -96,9 +96,6 @@ class EventViewset(viewsets.ModelViewSet):
         return Response({'message': 'Scores updated successfully!'}, status=status.HTTP_200_OK)
 
 
-
-
-
 class CustomObtainAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
         response = super(CustomObtainAuthToken, self).post(request, *args, **kwargs)
@@ -113,7 +110,6 @@ class UserProfileViewset(viewsets.ModelViewSet):
     serializer_class = UserProfileSerializer
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
-
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -133,6 +129,16 @@ class UserViewSet(viewsets.ModelViewSet):
             user.set_password(serializer.data.get('new_password'))
             user.save()
             return Response({'message': 'Password updated'}, status=status.HTTP_200_OK)
+        
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        user = User.objects.get(pk=response.data['id'])
+        serializer = UserSerializer(user, many=False)
+        new_profile = UserProfile.objects.create(user_id=response.data['id'])
+        profile_serializer = UserProfileSerializer(new_profile, many=False)
+        serializer.data['profile'] = profile_serializer.data
+        message = {'message': 'User created !', 'result': serializer.data}
+        return Response(message, status=status.HTTP_200_OK)
 
 
 class MemberViewSet(viewsets.ModelViewSet):
