@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.db import transaction
 from .models import Group, Event, UserProfile, Member, Bet
 from rest_framework import viewsets, status
 from rest_framework.authentication import TokenAuthentication
@@ -19,9 +20,7 @@ from .serializers import (
     EventFullSerializer,
     BetSerializer,
 )
-import logging
-
-LOG = logging.getLogger(__name__)
+from .signals import events_bulk_update_done
 
 
 class GroupViewset(viewsets.ModelViewSet):
@@ -48,15 +47,54 @@ class EventViewset(viewsets.ModelViewSet):
         serializer = EventFullSerializer(instance, many=False, context={'request': request})
         return Response(serializer.data)
     
-    @action(methods=['PUT'], detail=False, permission_classes=[IsAuthenticated], url_path='set_scores')
-    def set_scores(self, request):
+    @action(methods=['PUT'], detail=False, permission_classes=[IsAuthenticated], url_path='set_results')
+    def set_results(self, request):
+        if not isinstance(request.data, dict):
+            return Response({'error': 'Invalid data format. Expected a dictionnary.'})
+        
+        event_ids = list(request.data.keys())
+        events = Event.objects.filter(id__in=event_ids)
+        event_dict = {event.id: event for event in events}
+        errors = []
+        events_to_update = []
+
         for event_id, scores in request.data.items():
-            event = Event.objects.get(id=event_id)
-            event.score1 = scores.get('score1', None)
-            event.score2 = scores.get('score2', None)
-            event.save()
-            print(event.score1, flush=True)
-        return Response({'message': 'Scores updated !'}, status=status.HTTP_200_OK)
+            try:
+                event = event_dict.get(int(event_id))
+
+                if not event:
+                    errors.append(f"Event with id {event_id} does not exist.")
+                    continue
+
+                if not event.time < timezone.now():
+                    errors.append(f"Event with id {event_id} was not played yet.")
+                    continue
+
+                score1 = scores.get('score1')
+                score2 = scores.get('score2')
+
+                if score1 is None or score2 is None:
+                    errors.append(f"Scores missing for event {event_id}")
+                    continue
+
+                if not isinstance(score1, int) or not isinstance(score2, int):
+                    errors.append(f"Invalid scores for event {event_id}. Must be integers.")
+                    continue
+                    
+                event.score1 = score1
+                event.score2 = score2
+                events_to_update.append(event)
+            except Exception as e:
+                errors.append(f"Error updating event {event_id}: {str(e)}")
+            
+        if events_to_update:
+            with transaction.atomic():
+                Event.objects.bulk_update(events_to_update, ['score1', 'score2'])
+                events_bulk_update_done.send(sender=self.__class__, updated_events=events_to_update)
+        if errors:
+            return Response({'message': 'Some scores could not be updated', 'errors': errors}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'message': 'Scores updated successfully!'}, status=status.HTTP_200_OK)
+
 
 
 
@@ -160,7 +198,7 @@ class BetViewSet(viewsets.ModelViewSet):
                 score1 = request.data['score1']
                 score2 = request.data['score2']
 
-                my_bet, created = Bet.objects.get_or_create(event=event_id, user=request.user.id)
+                my_bet, created = Bet.objects.get_or_create(event_id=event_id, user_id=request.user.id)
                 my_bet.score1 = score1
                 my_bet.score2 = score2
                 my_bet.save()

@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import { EventType, ScoresType } from '../../interfaces';
 import { Button, TextField } from '@mui/material';
 import { useAuth } from '../../hooks/useAuth';
-import { saveScore } from '../../services/eventServices';
+import { saveResults } from '../../services/eventServices';
+import { toast } from 'react-toastify';
 
 interface EventProps {
     events: EventType[],
@@ -26,19 +27,16 @@ function EventScroreList({events}: EventProps) {
     }
 
     const saveScores = async () => {
-        const savedScores = await saveScore(scores, authData.token);
+        const savedScores = await saveResults(scores, authData.token);
+        if (savedScores) {
+            toast.success(savedScores.message)
+        }
     }
 
     return (
         <>
             <h1>Set event's score</h1>
             { events.map( event => {
-                if (event.score1 || event.score2) {
-                    const disabled = false;
-                } else {
-                    const disabled = true;
-                }
-
                 return (
                     <div key={event.id}>
                             {event.team1} 

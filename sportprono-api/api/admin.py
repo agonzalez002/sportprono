@@ -10,8 +10,8 @@ class GroupAdmin(admin.ModelAdmin):
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    fields = ('team1', 'team2', 'time', 'score1', 'score2', 'group')
-    list_display = ('id', 'team1', 'team2', 'time', 'score1', 'score2', 'group')
+    fields = ('team1', 'team2', 'time', 'score1', 'score2', 'group', 'team1_bonus', 'team2_bonus')
+    list_display = ('id', 'team1', 'team2', 'time', 'group')
 
 
 @admin.register(UserProfile)
@@ -28,5 +28,5 @@ class MemberAdmin(admin.ModelAdmin):
 
 @admin.register(Bet)
 class BetAdmin(admin.ModelAdmin):
-    fields = ('user', 'event', 'score1', 'score2', 'points')
+    fields = ('user', 'event', 'score1', 'score2', 'points', 'team1_bonus', 'team2_bonus')
     list_display = ('id', 'user', 'event')

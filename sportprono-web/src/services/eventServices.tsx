@@ -45,8 +45,8 @@ export function createEvent(eventData: ShortEventType, token: string) {
     })
 }
 
-export function saveScore(scores: ScoresType, token: string) {
-    return fetch('http://127.0.0.1:8000/api/events/set_scores/', {
+export function saveResults(scores: ScoresType, token: string) {
+    return fetch('http://127.0.0.1:8000/api/events/set_results/', {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ...models import Group
+from ...models import Group, Bet
 
 from ..Event.serializers import EventSerializer
 from ..Member.serializers import MemberSerializer
@@ -27,6 +27,10 @@ class GroupFullSerializer(serializers.ModelSerializer):
             points = 0
             member_serialized = MemberSerializer(member, many=False)
             member_data = member_serialized.data
+            member_bets = Bet.objects.filter(user_id=member_data["user"].get('id'))
+            for bet in member_bets:
+                if bet.points:
+                    points += bet.points 
             member_data['points'] = points
             member_data.pop('group')
 

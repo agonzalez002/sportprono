@@ -22,6 +22,8 @@ class Event(models.Model):
     score1 = models.IntegerField(null=True, blank=True)
     score2 = models.IntegerField(null=True, blank=True)
     group = models.ForeignKey(Group, related_name='events', on_delete=models.CASCADE)
+    team1_bonus = models.BooleanField(default=False)
+    team2_bonus = models.BooleanField(default=False)
 
     class Meta:
         unique_together = (('team1', 'team2', 'time', 'group'))
@@ -51,6 +53,8 @@ class Bet(models.Model):
     event = models.ForeignKey(Event, related_name='bets', on_delete=models.CASCADE)
     score1 = models.IntegerField(null=True, blank=True)
     score2 = models.IntegerField(null=True, blank=True)
+    team1_bonus = models.BooleanField(default=False)
+    team2_bonus = models.BooleanField(default=False)
     points = models.IntegerField(default=None, null=True, blank=True)
 
     class Meta:

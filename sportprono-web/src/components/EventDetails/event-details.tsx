@@ -62,12 +62,29 @@ function EventDetails() {
             const bet_data = {'event_id': event.id, score1, score2}
             const bet = await placeBet(bet_data, authData.token)
             if (bet) {
+                updateBetInEvent(bet.result)
                 toast.success(bet.message);
+                setScore1('');
+                setScore2('');
             }
-            setScore1('');
-            setScore2('');
         }        
     }
+
+    const updateBetInEvent = (newBet: BetType) => {
+        setEvent((prevEvent) => {
+            if (!prevEvent) return prevEvent;
+
+            const updatedBets = prevEvent.bets.map((bet) => bet.id === newBet.id ? newBet : bet);
+
+            const betExists = prevEvent.bets.some((bet) => bet.id === newBet.id);
+            const newBetsList = betExists ? updatedBets : [ ...updatedBets, newBet];
+
+            return {
+                ...prevEvent,
+                bets: newBetsList,
+            };
+        });
+    };
 
     return (
         <>
