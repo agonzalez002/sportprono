@@ -1,8 +1,9 @@
 // @ts-ignore TS6133
 import React, { useState, useEffect } from 'react';
-import { StyledGroupContent, StyledLink } from './StyledGroupList';
+import { StyledGroupContent } from './StyledGroupList';
 import useFetchGroups from '../../hooks/fetch-groups';
 import { GroupType } from '../../interfaces';
+import GroupItem from '../GroupItem/group-item';
 
 function GroupList() {
 
@@ -26,9 +27,7 @@ function GroupList() {
     <StyledGroupContent>
       { groupsData && groupsData.map((group: GroupType) => {
         return (
-          <StyledLink key={group.id} to={`/details/${group.id}`}>
-            {group.name} group
-          </StyledLink>
+          <GroupItem group={group} />
         )        
       })}
     </StyledGroupContent>

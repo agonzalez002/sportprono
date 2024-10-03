@@ -39,6 +39,7 @@ export interface EventType {
     score2: number;
     group: number;
     bets: BetType[];
+    num_bets: number;
 }
 
 export interface MemberType {

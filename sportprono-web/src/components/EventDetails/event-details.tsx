@@ -129,6 +129,9 @@ function EventDetails() {
                     <hr></hr>
                     <br />
                     {
+                        isFutureEvent && <h3>Il y a déjà {event.num_bets} qui ont indiqué leur pronostique</h3>
+                    }
+                    {
                         event.bets && event.bets.map((bet: BetType) => {
                             return (
                                 <div key={bet.id}>
