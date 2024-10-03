@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 
-function status(res: any) {
+function status(res: Response) {
     if (!res.ok) {
         return res.json().then((err: {message: string}) => {
             toast.error(err.message);

@@ -1,5 +1,4 @@
-// @ts-ignore TS6133
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Box, Button, TextField } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -17,12 +16,16 @@ import EventScroreList from '../EventList/event-score-list';
 
 function GroupAdmin() {
 
-    // @ts-ignore TS6133
     const { authData } = useAuth();
     const { state } = useLocation(); 
     const [ team1, setTeam1 ] = useState<string>('');
     const [ team2, setTeam2 ] = useState<string>('');
     const [ eventDate, setEventDate ] = useState<Dayjs | null>(dayjs())
+
+    if (!authData) {
+        return <p>Modal veuillez vous connecter !</p>
+    }
+
 
     const addEvent = async () => {
         console.log(eventDate?.toISOString())

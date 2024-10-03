@@ -1,5 +1,4 @@
-// @ts-ignore TS6133
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { EventType, ScoresType } from '../../interfaces';
 import { Button, TextField } from '@mui/material';
 import { useAuth } from '../../hooks/useAuth';
@@ -12,9 +11,13 @@ interface EventProps {
 
 function EventScroreList({events}: EventProps) {
 
-    // @ts-ignore TS6133
     const { authData } = useAuth();
     const [ scores, setScores ] = useState<ScoresType>({});
+
+    if (!authData) {
+        return <p>Modal veuillez vous connecter !</p>
+    }
+
 
     const handleScoreChange = (eventId: number, team: 'score1' | 'score2', value: number) => {
         setScores(prevScores => ({

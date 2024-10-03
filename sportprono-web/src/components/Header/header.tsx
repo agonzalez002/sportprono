@@ -1,13 +1,14 @@
-// @ts-ignore TS6133
-import React from 'react'; 
 import logoLight from '../../assets/images/logo/logoLight.png';
 import darkLogo from '../../assets/images/logo/logoDark.png';
-import StyledHeader from './StyledHeader';
-import { useTheme } from '@mui/material';
+import { StyledHeader, MaterialUISwitch } from './StyledHeader';
+import { Box, FormControlLabel, useTheme } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
+interface HeaderType {
+  toggleTheme: () => void;
+}
 
-function Header() {
+function Header({toggleTheme}: HeaderType) {
   const navigate = useNavigate();
 
   const theme = useTheme();
@@ -22,6 +23,13 @@ function Header() {
         height="75" 
         onClick={() => { navigate('/') }}
       />
+      <Box>
+        <FormControlLabel
+          control={<MaterialUISwitch sx={{ m: 1 }} />}
+          label="MUI switch"
+          onChange={toggleTheme}
+        />
+      </Box>
     </StyledHeader>
   )
 }

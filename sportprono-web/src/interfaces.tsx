@@ -3,16 +3,20 @@ export interface UserType {
     user: {
         id: number;
         username: string;
+        email: string;
         profile: {
+            id: number;
             image: string;
             image_url: string;
+            is_premium: boolean;
+            bio: string;
         };
     };
 }
 
 export interface AuthContextType {
-    authData: UserType;
-    setAuth: (newUser: UserType) => void;
+    authData: UserType | null;
+    setAuth: (newUser: UserType | null) => void;
 }
 
 export interface BetType {

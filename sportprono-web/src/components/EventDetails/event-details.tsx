@@ -1,5 +1,4 @@
-// @ts-ignore TS6133
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { BetType, EventType } from '../../interfaces';
 import useFetchEvent from '../../hooks/fetch-event';
@@ -16,16 +15,16 @@ import { StyledLink } from '../../globalStyled';
 
 function EventDetails() {
 
-    // @ts-ignore TS6133
     const { authData } = useAuth();
     const { id } = useParams();
-    const [ eventDetails, loading, error ] = useFetchEvent(id, authData.token);
     const [ event, setEvent ] = useState<EventType>();
     const [ evtTime, setEvtTime ] = useState<DateTime>(DateTime.fromISO("2000-01-01T00:00:00"));
     const [ isFutureEvent, setIsFutureEvent ] = useState<boolean>(false);
     const [ timeDiff, setTimeDiff ] = useState<string>('');
     const [ score1, setScore1 ] = useState<string>('');
     const [ score2, setScore2 ] = useState<string>('');
+
+    const [ eventDetails, loading ] = useFetchEvent(id, authData?.token);
 
     useEffect(() => {
         if (eventDetails && typeof eventDetails !== 'boolean') {
@@ -39,9 +38,9 @@ function EventDetails() {
         }
     }, [eventDetails, authData]);
 
-    if (error) {
-        return <h1>Error !</h1>;
-    };
+    if (!authData) {
+        return <p>Modal veuillez vous connecter !</p>
+    }
 
     if (loading) {
         return <h1>Loading...</h1>;
@@ -50,7 +49,7 @@ function EventDetails() {
     const impossibleScore = ['1', '2', '4']
 
     const saveBet = async () => {
-        var goodScore = true
+        let goodScore = true
         if (score1 && impossibleScore.indexOf(score1) !== -1) {
             toast.error('This score is not possible for team1');
             goodScore = false

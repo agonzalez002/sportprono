@@ -1,5 +1,4 @@
-// @ts-ignore TS6133
-import React, { useState } from "react";
+import { useState } from "react";
 import { AccountCircle, Visibility, VisibilityOff, AlternateEmail } from "@mui/icons-material";
 import { Box, Button, FormControl, IconButton, Input, InputAdornment, InputLabel, TextField } from "@mui/material";
 import { signUp } from "../../services/userServices";
@@ -11,7 +10,6 @@ import { useNavigate } from "react-router-dom";
 function SignUp() {
 
     const navigate = useNavigate();
-    // @ts-ignore TS6133
     const { setAuth } = useAuth();
 
     const [email, setEmail] = useState<string | null>(null);

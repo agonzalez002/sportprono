@@ -1,5 +1,4 @@
-// @ts-ignore TS6133
-import React, { useState } from "react";
+import { useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { Box, Button, FormControl, IconButton, Input, InputAdornment, InputLabel, TextField } from "@mui/material";
 import { uploadAvatar, changePassword } from "../../services/userServices";
@@ -8,14 +7,17 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { toast } from 'react-toastify';
 
 function Account() {
-    // @ts-ignore TS6133
-    const { authData } = useAuth();
+    const { authData } = useAuth() || { authData: null };
     const [ image, setImage ] = useState<File>();
     const [ oldPassword, setOldPassword ] = useState<string>();
     const [ newPassword1, setNewPassword1 ] = useState<string>();
     const [ newPassword2, setNewPassword2 ] = useState<string>();
     const [ showOldPassword, setShowOldPassword ] = useState<boolean>(false);
     const [ showNewPassword, setShowNewPassword ] = useState<boolean>(false);
+
+    if (!authData) {
+        return <h1>Vous devez être connecté pour accéder à cette page !</h1>
+    }
 
     const uploadFile = async () => {
         const uploadData = new FormData();

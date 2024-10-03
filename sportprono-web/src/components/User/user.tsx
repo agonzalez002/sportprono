@@ -1,5 +1,4 @@
-// @ts-ignore TS6133
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { UserDataType } from '../../interfaces';
 import { Avatar } from '@mui/material';
 import { useNavigate } from 'react-router-dom';

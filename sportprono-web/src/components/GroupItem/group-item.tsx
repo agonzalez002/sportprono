@@ -1,5 +1,3 @@
-// @ts-ignore TS6133
-import React, { useState } from 'react';
 import { GroupType } from '../../interfaces';
 import { StyledLink } from './StyledGroupItem';
 

@@ -1,12 +1,11 @@
-// @ts-ignore TS6133
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Header from './components/Header/header';
 import MainContent from './components/MainContent/main-content';
 import SideBar from './components/Sidebar/sidebar';
 import { ThemeProvider } from '@mui/material';
 import { lightTheme, darkTheme } from './theme';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { AuthProvider } from './hooks/useAuth';
+import { AuthProvider } from './hooks/AuthProvider';
 import { Bounce, ToastContainer } from 'react-toastify';
 import './style.less';
 import 'react-toastify/dist/ReactToastify.css';
@@ -15,8 +14,7 @@ import 'react-toastify/dist/ReactToastify.css';
 function App() {
   const [ theme, setTheme ] = useState(lightTheme);
 
-  // @ts-ignore TS6133
-  const toogleTheme = () => {
+  const toggleTheme = () => {
     setTheme(theme.palette.mode === 'light' ? darkTheme : lightTheme);
   }
 
@@ -27,7 +25,7 @@ function App() {
       <AuthProvider user={user}>
         <div className='App'>
           <Router>
-            <Header />
+            <Header toggleTheme={toggleTheme} />
             <div className='content'>
               <SideBar />
               <MainContent />

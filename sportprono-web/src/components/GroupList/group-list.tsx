@@ -1,5 +1,4 @@
-// @ts-ignore TS6133
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { StyledGroupContent } from './StyledGroupList';
 import useFetchGroups from '../../hooks/fetch-groups';
 import { GroupType } from '../../interfaces';
@@ -7,17 +6,14 @@ import GroupItem from '../GroupItem/group-item';
 
 function GroupList() {
 
-  const [ groups, loading, error ] = useFetchGroups();
-  const [ groupsData, setGroupsData ] = useState<GroupType[] | null>(null);
+  const [ groups, loading ] = useFetchGroups();
+  const [ groupsData, setGroupsData ] = useState<GroupType[]>([]);
   
   useEffect(() => {
-    // @ts-ignore TS2345
-    setGroupsData(groups);
+    if (Array.isArray(groups)) {
+      setGroupsData(groups);
+    }
   }, [groups]);
-
-  if (error) {
-    return <h1>Error !</h1>;
-  };
 
   if (loading) {
     return <h1>Loading...</h1>;

@@ -1,5 +1,4 @@
-// @ts-ignore TS6133
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { StyledGroupDetails } from './StyledGroupDetails';
 import { ArrowBack } from '@mui/icons-material';
@@ -22,9 +21,8 @@ function GroupDetails() {
 
     const navigate = useNavigate();
     const { id } = useParams();
-    // @ts-ignore TS6133
     const { authData } = useAuth();
-    const [ groupDetails, loading, error ] = useFetchGroup(id);
+    const [ groupDetails, loading ] = useFetchGroup(id);
     const [ group, setGroup ] = useState<GroupFullType | null>(null);
     const [ inGroup, setInGroup ] = useState<boolean>(false);
     const [ isAdmin, setIsAdmin ] = useState<boolean>(false);
@@ -40,18 +38,16 @@ function GroupDetails() {
             if (groupDetails.members) {
 
                 groupDetails.members.sort((a,b) => b.points - a.points);
-                const availableTrophies = ['gold', 'silver', 'bronze'];
+                const availableTrophies = ['gold', 'silver', 'bronze'] as const;
                 let currentTrophy = 0;
                 groupDetails.members.map( (m, index) => {
                     if (index === 0) {
-                        // @ts-ignore TS6133
                         m.trophy = availableTrophies[currentTrophy];
                     } else {
                         if (m.points !== groupDetails.members[index-1].points) {
                             currentTrophy++;
                         }
                         if (currentTrophy < availableTrophies.length) {
-                            // @ts-ignore TS6133
                             m.trophy = availableTrophies[currentTrophy];
                         }
                     }
@@ -67,15 +63,16 @@ function GroupDetails() {
         }
     }, [groupDetails, authData]);
 
-    if (error) {
-        return <h1>Error !</h1>;
-    };
-
     if (loading) {
         return <h1>Loading...</h1>;
     };
 
     const join = async () => {
+        if (!authData) {
+            toast.warning("Tu dois être connecté pour rejoindre un groupe !");
+            return;
+        }
+
         if (group) {
             const joined = await joinGroup({user: authData.user.id, group: group.id}, authData.token)
             if (joined) {
@@ -89,6 +86,11 @@ function GroupDetails() {
     }
 
     const leave = async () => {
+        if (!authData) {
+            toast.warning("Tu dois être connecté pour quitter un groupe !");
+            return;
+        }
+        
         if (group) {
             const leaved = await leaveGroup({user: authData.user.id, group: group.id}, authData.token)
             if (leaved) {

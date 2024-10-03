@@ -1,0 +1,40 @@
+{
+    "parser": "@typescript-eslint/parser",
+    "extends": [
+      "airbnb",
+      "airbnb/hooks",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:react/recommended",
+      "plugin:jsx-a11y/recommended"
+    ],
+    "plugins": [
+      "@typescript-eslint",
+      "react",
+      "jsx-a11y"
+    ],
+    "env": {
+      "browser": true,
+      "es2021": true,
+      "node": true
+    },
+    "parserOptions": {
+      "ecmaFeatures": {
+        "jsx": true
+      },
+      "ecmaVersion": 12,
+      "sourceType": "module"
+    },
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    },
+    "rules": {
+      // Règles personnalisées ici
+      "react/jsx-filename-extension": [1, { "extensions": [".tsx"] }],
+      "import/extensions": "off",
+      "import/no-unresolved": "off",
+      "@typescript-eslint/explicit-module-boundary-types": "off"
+    }
+  }
+  

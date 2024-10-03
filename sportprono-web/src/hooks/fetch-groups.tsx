@@ -5,8 +5,6 @@ import { GroupType } from "../interfaces";
 function useFetchGroups() {
     const [ groups, setGroups ] = useState<GroupType[] | null>(null);
     const [ loading, setLoading ] = useState<boolean>(true);
-    // @ts-ignore TS6133
-    const [ error, setError ] = useState<boolean | null>(null);
 
     useEffect(() => {
         const getData = async () => {
@@ -18,7 +16,7 @@ function useFetchGroups() {
         getData();
     }, []);
 
-    return [groups, loading, error];
+    return [groups, loading];
 };
 
 export default useFetchGroups;

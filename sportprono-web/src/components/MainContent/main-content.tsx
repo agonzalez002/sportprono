@@ -1,5 +1,3 @@
-// @ts-ignore TS6133
-import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import GroupList from '../GroupList/group-list';
 import StyledMainContent from './StyledMainContent';

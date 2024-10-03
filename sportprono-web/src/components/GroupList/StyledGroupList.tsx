@@ -1,6 +1,6 @@
 import { styled } from "@mui/material";
 
-export const StyledGroupContent = styled('div')(({}) => ({
+export const StyledGroupContent = styled('div')(() => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'flex-start',

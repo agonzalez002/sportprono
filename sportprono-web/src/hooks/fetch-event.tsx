@@ -3,15 +3,13 @@ import { getEvent } from "../services/eventServices";
 import { EventType } from "../interfaces";
 
 
-function useFetchEvent(eventId: string | undefined, token: string) {
+function useFetchEvent(eventId: string | undefined, token: string | undefined) {
 
     const [ eventDetails, setEventDetail ] = useState<EventType | null>(null);
     const [ loading, setLoading ] = useState<boolean>(true);
-    // @ts-ignore TS6133
-    const [ error, setError ] = useState<boolean | null>(null);
 
-    if (eventId) {
-        useEffect(() => {
+    useEffect(() => {
+        if (eventId && token) {
             const getData = async () => {
                 setLoading(true);
                 const data = await getEvent(eventId, token);
@@ -19,10 +17,10 @@ function useFetchEvent(eventId: string | undefined, token: string) {
                 setLoading(false);
             }
             getData();
-        }, [eventId])
-    }
+        }
+    }, [eventId, token])
 
-    return [eventDetails, loading, error]
+    return [eventDetails, loading]
 };
 
 export default useFetchEvent;

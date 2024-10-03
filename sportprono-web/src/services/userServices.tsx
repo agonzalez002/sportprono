@@ -1,7 +1,7 @@
 import { UserDataSignUpType, ChangePasswordType } from "../interfaces";
 import status from "../utils";
 
-export function auth(credentials: Object) {
+export function auth(credentials: object) {
     return fetch('http://localhost:8000/api/login', {
         method: 'POST',
         headers: {
@@ -29,7 +29,7 @@ export function signUp(userData: UserDataSignUpType) {
     });
 }
 
-export function uploadAvatar(profileId: number, data: any, token: string) {
+export function uploadAvatar(profileId: number, data: BodyInit, token: string) {
     return fetch(`http://localhost:8000/api/profile/${profileId}/`, {
         method: 'PUT',
         headers: {

@@ -1,5 +1,4 @@
-// @ts-ignore TS6133
-import React, { useState } from 'react';
+import { useState } from 'react';
 import StyledSidebar from './StyledSidebar';
 import { Box, Button, FormControl, IconButton, Input, InputAdornment, InputLabel, TextField } from '@mui/material';
 import { AccountCircle, Visibility, VisibilityOff } from '@mui/icons-material';
@@ -15,7 +14,6 @@ function SideBar() {
   const [ username, setUsername ] = useState<string>('');
   const [ password, setPassword ] = useState<string>('');
   const [ showPassword, setShowPassword] = useState<boolean>(false);
-  // @ts-ignore TS6133
   const { authData, setAuth } = useAuth();
 
   const handleClickShowPassword = () => {
