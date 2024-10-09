@@ -1,12 +1,17 @@
 import { toast } from "react-toastify";
 
-function status(res: Response) {
+export function status(res: Response) {
     if (!res.ok) {
-        return res.json().then((err: {message: string}) => {
-            toast.error(err.message);
-        })
+        let message = '';
+        if (res.url.endsWith('login')) {
+            message = "Authentication failed!";
+        } else {
+            return res.json().then((err: {message: string}) => {
+                message = err.message || 'An unknown error occurred.';
+                toast.error(message);
+            });
+        }
+        throw new Error(message);
     }
     return res.json();
 }
-
-export default status;

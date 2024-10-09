@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Header from './components/Header/header';
 import MainContent from './components/MainContent/main-content';
 import SideBar from './components/Sidebar/sidebar';
@@ -12,11 +12,21 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {
-  const [ theme, setTheme ] = useState(lightTheme);
+  const savedTheme = localStorage.getItem('theme') || 'light';
+  const [ theme, setTheme ] = useState(savedTheme === 'dark' ? darkTheme : lightTheme);
 
   const toggleTheme = () => {
-    setTheme(theme.palette.mode === 'light' ? darkTheme : lightTheme);
+    const newTheme = theme.palette.mode === 'light' ? darkTheme : lightTheme;
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme.palette.mode);
   }
+
+  useEffect(() => {
+    const storedTheme = localStorage.getItem('theme');
+    if (storedTheme) {
+      setTheme(storedTheme === 'dark' ? darkTheme : lightTheme);
+    }
+  }, []);
 
   const user = JSON.parse(localStorage.getItem('sportprono-user') as string);
 
@@ -26,10 +36,12 @@ function App() {
         <div className='App'>
           <Router>
             <Header toggleTheme={toggleTheme} />
-            <div className='content'>
-              <SideBar />
-              <MainContent />
-            </div>
+            {
+              /*<div className='content'>
+                <SideBar />
+                <MainContent />
+              </div>*/
+            }
           </Router>
         </div>
         <ToastContainer 

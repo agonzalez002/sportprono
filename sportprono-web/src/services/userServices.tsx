@@ -1,5 +1,6 @@
+import { toast } from "react-toastify";
 import { UserDataSignUpType, ChangePasswordType } from "../interfaces";
-import status from "../utils";
+import { status } from "../utils";
 
 export function auth(credentials: object) {
     return fetch('http://localhost:8000/api/login', {
@@ -10,8 +11,9 @@ export function auth(credentials: object) {
         body: JSON.stringify(credentials),
     })
     .then(status)
-    .catch( e => {
+    .catch( (e) => {
         console.log(e);
+        throw new Error('Authentication error');
     })
 }
 

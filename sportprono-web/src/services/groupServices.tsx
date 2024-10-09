@@ -1,4 +1,4 @@
-import status from "../utils";
+import { status } from "../utils";
 
 export function getGroup(id: string) {
     return fetch(`http://127.0.0.1:8000/api/groups/${id}/`)

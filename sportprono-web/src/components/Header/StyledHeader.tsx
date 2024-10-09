@@ -1,13 +1,19 @@
-import { styled, Switch } from "@mui/material";
+import { Box, styled, Switch } from "@mui/material";
 
 export const StyledHeader = styled('div')(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
     height: '80px',
     borderBottom: `5px solid ${theme.palette.primary.main}`,
     padding: '5px 20px',
+    ".logo-content": {
+        flex: 1,
+    },
     img: {
         ":hover": {cursor: "pointer"},
-    }
+    },
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between"
 }));
 
 export const MaterialUISwitch = styled(Switch)(({ theme }) => ({
@@ -64,4 +70,9 @@ export const MaterialUISwitch = styled(Switch)(({ theme }) => ({
         backgroundColor: '#8796A5',
         }),
     },
+}));
+
+export const StyledBox = styled(Box)(({}) => ({
+    display: 'flex',
+    alignItems: 'center',
 }));

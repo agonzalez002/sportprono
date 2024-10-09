@@ -1,4 +1,4 @@
-import status from "../utils";
+import { status } from "../utils";
 import { PlaceBetType, ScoresType, ShortEventType } from "../interfaces";
 
 export function getEvent(id: string, token: string) {
