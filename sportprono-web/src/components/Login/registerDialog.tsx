@@ -1,7 +1,6 @@
 import { AccountCircle, AlternateEmail, Visibility, VisibilityOff } from "@mui/icons-material";
 import { 
     Box, 
-    Button, 
     Dialog, 
     DialogActions, 
     DialogContent, 
@@ -67,10 +66,11 @@ function RegisterDialog({open, setOpen}: RegisterType) {
                   navigate('/my-account');
                 }
               } else {
-                  toast.error("Password don't match")
+                  toast.error("Mots de passe différents !")
               }
         } catch (error) {
-            toast.error("Register fail !");
+            console.log(error);
+            toast.error("Erreur lors de l'inscription !");
         } finally {
             setLoading(false);
         }
@@ -79,7 +79,7 @@ function RegisterDialog({open, setOpen}: RegisterType) {
     
     return (
         <Dialog open={open} onClose={handleClose}>
-            <DialogTitle>Register</DialogTitle>
+            <DialogTitle>Inscription</DialogTitle>
             <DialogContent>
                 <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
                     <AlternateEmail sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
@@ -95,7 +95,7 @@ function RegisterDialog({open, setOpen}: RegisterType) {
                     <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
                     <StyledTextField 
                         id="input-with-sx-sign-up-username" 
-                        label="Username" 
+                        label="Nom d'utilisateur" 
                         variant="standard" 
                         onChange={ e => setUsername(e.target.value) }
                     />
@@ -104,7 +104,7 @@ function RegisterDialog({open, setOpen}: RegisterType) {
                 <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
                     <PasswordIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
                     <FormControl sx={{ mt: 1 }} variant="standard">
-                        <StyledInputLabel htmlFor="password">Password</StyledInputLabel>
+                        <StyledInputLabel htmlFor="password">Mot de passe</StyledInputLabel>
                         <Input
                             id="password"
                             type={showPassword ? 'text' : 'password'}
@@ -126,7 +126,7 @@ function RegisterDialog({open, setOpen}: RegisterType) {
                 <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
                     <PasswordIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
                     <FormControl sx={{ mt: 1 }} variant="standard">
-                    <StyledInputLabel htmlFor="password2">Confirm password</StyledInputLabel>
+                    <StyledInputLabel htmlFor="password2">Confirmer le mot de passe</StyledInputLabel>
                     <Input
                         id="password2"
                         type={showPassword ? 'text' : 'password'}
@@ -146,7 +146,7 @@ function RegisterDialog({open, setOpen}: RegisterType) {
                 </Box>
             </DialogContent>
             <DialogActions>
-                <LoadingButton loading={loading} variant='contained' color='primary' onClick={handleSubmit}>Register</LoadingButton>
+                <LoadingButton loading={loading} variant='contained' color='primary' onClick={handleSubmit}>Valider</LoadingButton>
             </DialogActions>               
         </Dialog>
     )

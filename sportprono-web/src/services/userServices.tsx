@@ -1,4 +1,3 @@
-import { toast } from "react-toastify";
 import { UserDataSignUpType, ChangePasswordType } from "../interfaces";
 import { status } from "../utils";
 
@@ -13,7 +12,7 @@ export function auth(credentials: object) {
     .then(status)
     .catch( (e) => {
         console.log(e);
-        throw new Error('Authentication error');
+        throw new Error("Nom d'utilisateur ou mot de passe incorrect !");
     })
 }
 

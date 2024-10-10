@@ -27,7 +27,7 @@ function Account() {
         console.log(uploadData);
         const uploaded = await uploadAvatar(authData.user.profile.id, uploadData, authData.token);
         if (uploaded) {
-            toast.success("Image uploaded");
+            toast.success("Image uploadée !");
         }
     }
 
@@ -43,10 +43,10 @@ function Account() {
                 authData.token,
             );
             if (passwordData) {
-                toast.success("Password changed !")
+                toast.success("Mot de passe modifié !")
             }
         } else {
-            toast.warning("Password don't match");
+            toast.warning("Mots de passe différents !");
         }
     }
 

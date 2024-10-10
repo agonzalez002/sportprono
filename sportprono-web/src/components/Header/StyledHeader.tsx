@@ -72,7 +72,7 @@ export const MaterialUISwitch = styled(Switch)(({ theme }) => ({
     },
 }));
 
-export const StyledBox = styled(Box)(({}) => ({
+export const StyledBox = styled(Box)(() => ({
     display: 'flex',
     alignItems: 'center',
 }));

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import Header from './components/Header/header';
 import MainContent from './components/MainContent/main-content';
-import SideBar from './components/Sidebar/sidebar';
 import { ThemeProvider } from '@mui/material';
 import { lightTheme, darkTheme } from './theme';
 import { BrowserRouter as Router } from 'react-router-dom';
@@ -37,10 +36,9 @@ function App() {
           <Router>
             <Header toggleTheme={toggleTheme} />
             {
-              /*<div className='content'>
-                <SideBar />
+              <div className='content'>
                 <MainContent />
-              </div>*/
+              </div>
             }
           </Router>
         </div>

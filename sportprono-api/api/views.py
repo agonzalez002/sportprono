@@ -1,7 +1,6 @@
-from django.contrib.auth.models import User
 from django.utils import timezone
 from django.db import transaction
-from .models import Group, Event, UserProfile, Member, Bet
+from .models import Group, Event, UserProfile, Member, Bet, CustomUser
 from rest_framework import viewsets, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
@@ -100,7 +99,7 @@ class CustomObtainAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
         response = super(CustomObtainAuthToken, self).post(request, *args, **kwargs)
         token = Token.objects.get(key=response.data['token'])
-        user = User.objects.get(id=token.user_id)
+        user = CustomUser.objects.get(id=token.user_id)
         user_serializer = UserSerializer(user, many=False)
         return Response({'token': token.key, 'user': user_serializer.data})
 
@@ -113,14 +112,14 @@ class UserProfileViewset(viewsets.ModelViewSet):
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
+    queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
     authentication_classes = (TokenAuthentication,)
     permission_classes = (AllowAny,)
 
     @action(methods=['PUT'], detail=True, serializer_class=ChangePasswordSerializer, permission_classes=[IsAuthenticated])
     def change_password(self, request, pk):
-        user = User.objects.get(pk=pk)
+        user = CustomUser.objects.get(pk=pk)
         serializer = ChangePasswordSerializer(data=request.data)
 
         if serializer.is_valid():
@@ -132,7 +131,7 @@ class UserViewSet(viewsets.ModelViewSet):
         
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
-        user = User.objects.get(pk=response.data['id'])
+        user = CustomUser.objects.get(pk=response.data['id'])
         serializer = UserSerializer(user, many=False)
         new_profile = UserProfile.objects.create(user_id=response.data['id'])
         profile_serializer = UserProfileSerializer(new_profile, many=False)
@@ -151,7 +150,7 @@ class MemberViewSet(viewsets.ModelViewSet):
     def join(self, request):
         if 'group' in request.data and 'user' in request.data:
             group = Group.objects.get(id=request.data['group'])
-            user = User.objects.get(id=request.data['user'])
+            user = CustomUser.objects.get(id=request.data['user'])
 
             member, created = Member.objects.get_or_create(group=group, user=user)
             serializer = MemberSerializer(member, many=False)
@@ -167,7 +166,7 @@ class MemberViewSet(viewsets.ModelViewSet):
     def leave(self, request):
         if 'group' in request.data and 'user' in request.data:
             group = Group.objects.get(id=request.data['group'])
-            user = User.objects.get(id=request.data['user'])
+            user = CustomUser.objects.get(id=request.data['user'])
 
             member = Member.objects.get(group=group, user=user)
             member.delete()

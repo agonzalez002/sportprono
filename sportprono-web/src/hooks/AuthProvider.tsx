@@ -8,7 +8,7 @@ interface AuthProviderType {
 
 export const AuthContext = createContext<AuthContextType | null>(null);
 
-const setItemWithExpiration = (key: string, value: any, expirationInMinutes: number) => {
+const setItemWithExpiration = (key: string, value: object, expirationInMinutes: number) => {
     const now = new Date();
     const item = {
         value: value,

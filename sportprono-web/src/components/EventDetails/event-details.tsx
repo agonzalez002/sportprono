@@ -51,10 +51,10 @@ function EventDetails() {
     const saveBet = async () => {
         let goodScore = true
         if (score1 && impossibleScore.indexOf(score1) !== -1) {
-            toast.error('This score is not possible for team1');
+            toast.error("Ce score n'est pas possible pour l'équipe 1");
             goodScore = false
         } else if (score2 && impossibleScore.indexOf(score2) !== -1) {
-            toast.error('This score is not possible for team2');
+            toast.error("Ce score n'est pas possible pour l'équipe 2");
             goodScore = false
         }
         if (event && goodScore) {

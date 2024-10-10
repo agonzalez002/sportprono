@@ -47,11 +47,13 @@ function LoginDialog({ open, setOpen, setRegisterOpen }: LoginDialogType,) {
                 setUsername('');
                 setOpen(false);
             }
-        } catch (error: unknown) {    
+        } catch (error: unknown) {
+            setUsername('');
+            setPassword('');
             if (error instanceof Error) {
                 toast.error(error.message);
             } else {
-                toast.error('An unknown error occurred.');
+                toast.error('Une erreur inconnue est survenue !');
             }
         } finally {
             setLoading(false);
@@ -72,26 +74,28 @@ function LoginDialog({ open, setOpen, setRegisterOpen }: LoginDialogType,) {
     }
     return (
         <Dialog open={open} onClose={handleClose} >
-            <DialogTitle>Login</DialogTitle>
+            <DialogTitle>Connexion</DialogTitle>
             <DialogContent>
                 <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
                     <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
                     <StyledTextField 
                         id="input-with-sx" 
                         className='username' 
-                        label="Username" 
-                        variant="standard" 
-                        onChange={ e => setUsername(e.target.value) } 
+                        label="Nom d'utilisateur" 
+                        variant="standard"
+                        value={username}
+                        onChange={ e => setUsername(e.target.value) }
                     />
                 </Box>
 
                 <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
                     <PasswordIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
                     <FormControl sx={{ mt: 1 }} variant="standard">
-                        <StyledInputLabel htmlFor="standard-adornment-password">Password</StyledInputLabel>
+                        <StyledInputLabel htmlFor="standard-adornment-password">Mot de passe</StyledInputLabel>
                         <Input
                             id="standard-adornment-password"
                             type={showPassword ? 'text' : 'password'}
+                            value={password}
                             endAdornment={
                             <InputAdornment position="end">
                                 <IconButton
@@ -108,8 +112,8 @@ function LoginDialog({ open, setOpen, setRegisterOpen }: LoginDialogType,) {
                 </Box>
             </DialogContent>
             <DialogActions>
-                <LoadingButton loading={loading} variant='contained' color='primary' onClick={handleSubmit}>Login</LoadingButton>
-                <Button variant='outlined' color='primary' onClick={handleRegister}>Register</Button>
+                <LoadingButton loading={loading} variant='contained' color='primary' onClick={handleSubmit}>Connexion</LoadingButton>
+                <Button variant='outlined' color='primary' onClick={handleRegister}>Inscription</Button>
             </DialogActions>
         </Dialog>
     );

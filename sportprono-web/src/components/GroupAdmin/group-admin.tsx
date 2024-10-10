@@ -38,7 +38,7 @@ function GroupAdmin() {
             }
             const newEvent = await createEvent(eventData, authData.token)
             if (newEvent) {
-                toast.success('Event added succefuly');
+                toast.success('Evenement ajouté avec succés !');
             }
         }
     }

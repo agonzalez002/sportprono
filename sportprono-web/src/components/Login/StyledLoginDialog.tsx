@@ -1,4 +1,5 @@
-import { styled, TextField, InputLabel } from "@mui/material";
+import { styled, TextField, InputLabel, Popper } from "@mui/material";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 
 export const StyledTextField = styled(TextField)(({theme}) => ({
@@ -14,4 +15,15 @@ export const StyledInputLabel = styled(InputLabel)(({theme}) => ({
     '& .MuiInputBase-input': {
         color: theme.palette.mode === 'dark' ? '#fff' : '#000', // Applique la couleur au texte à l'intérieur du champ
     },
+}));
+
+export const StyledPopper = styled(Popper)(() => ({
+    potion: 'fixed',
+    top: '65px !important',
+    right: '20px',
+    left: 'unset !important',
+}));
+
+export const StyledAccountCircleIcon = styled(AccountCircleIcon)(() => ({
+    marginRight: "10px",
 }));

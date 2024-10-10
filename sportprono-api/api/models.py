@@ -1,9 +1,22 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
 
 def upload_path_handler(instance, filename):
     return f"avatars/{instance.user.id}/{filename}"
+
+
+class CustomUser(AbstractUser):
+    email = models.EmailField(unique=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['username', 'email'], name='unique_username_email')
+        ]
+
+    def clean(self):
+        if CustomUser.objects.exclude(pk=self.pk).filter(username=self.username, email=self.email).exists():
+            raise ValidationError("A user with this username and email already exists.")
 
 
 class Group(models.Model):
@@ -30,7 +43,7 @@ class Event(models.Model):
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
+    user = models.OneToOneField(CustomUser, related_name='profile', on_delete=models.CASCADE)
     image = models.ImageField(upload_to=upload_path_handler, blank=True)
     is_premium = models.BooleanField(default=False)
     bio = models.CharField(max_length=256, blank=True, null=True)
@@ -38,7 +51,7 @@ class UserProfile(models.Model):
 
 class Member(models.Model):
     group = models.ForeignKey(Group, related_name='members', on_delete=models.CASCADE)
-    user = models.ForeignKey(User, related_name='members_of', on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, related_name='members_of', on_delete=models.CASCADE)
     admin = models.BooleanField(default=False)
 
     class Meta:
@@ -49,7 +62,7 @@ class Member(models.Model):
 
 
 class Bet(models.Model):
-    user = models.ForeignKey(User, related_name='user_bet', on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, related_name='user_bet', on_delete=models.CASCADE)
     event = models.ForeignKey(Event, related_name='bets', on_delete=models.CASCADE)
     score1 = models.IntegerField(null=True, blank=True)
     score2 = models.IntegerField(null=True, blank=True)

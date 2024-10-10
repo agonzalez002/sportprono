@@ -1,17 +1,14 @@
 import { useState, useEffect } from 'react';
 import { UserDataType } from '../../interfaces';
 import { Avatar } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 
 interface UserProps {
     user: UserDataType;
     accessAccount: boolean;
+    setOpenMenu?: (openMenu: boolean) => void;
 }
 
-function User({ user, accessAccount }: UserProps, ) {
-
-    const navigate = useNavigate();
-
+function User({ user, accessAccount, setOpenMenu }: UserProps, ) {
     const [ imageUrl, setImageUrl ] = useState<string>('');
 
     useEffect(() => {
@@ -22,9 +19,9 @@ function User({ user, accessAccount }: UserProps, ) {
         }
     }, [user]);
 
-    const goToAccount = () => {
-        if (accessAccount === true) {
-            navigate('/my-account');
+    const openMenu = () => {
+        if (accessAccount === true && setOpenMenu) {
+            setOpenMenu(true);
         }
     }
 
@@ -33,8 +30,10 @@ function User({ user, accessAccount }: UserProps, ) {
             <Avatar 
                 alt={user.username} 
                 src={imageUrl} 
-                onClick={goToAccount}
-                sx={{ 'cursor': 'pointer' }}
+                onClick={openMenu}
+                sx={{ 
+                    cursor: accessAccount ? 'pointer' : 'inherit',
+                }}
             />
         </>
     )
