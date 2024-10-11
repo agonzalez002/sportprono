@@ -15,7 +15,7 @@ function User({ user, accessAccount, setOpenMenu }: UserProps, ) {
         if (user.profile && user.profile.image) {
             setImageUrl(user.profile.image_url);
         } else {
-            setImageUrl("/mediafiles/male.png");
+            setImageUrl("http://localhost:8000/mediafiles/male.png");
         }
     }, [user]);
 

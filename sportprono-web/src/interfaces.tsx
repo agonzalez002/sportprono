@@ -11,6 +11,8 @@ export interface UserType {
             is_premium: boolean;
             bio: string;
         };
+        firstname: string,
+        lastname: string,
     };
 }
 
