@@ -11,8 +11,8 @@ export interface UserType {
             is_premium: boolean;
             bio: string;
         };
-        firstname: string,
-        lastname: string,
+        first_name: string,
+        last_name: string,
     };
 }
 
@@ -106,4 +106,11 @@ export interface ScoresType {
         score1: number;
         score2: number;
     };
+}
+
+export interface ChangeUserDataType {
+    username: string;
+    email: string;
+    first_name: string,
+    last_name: string,
 }

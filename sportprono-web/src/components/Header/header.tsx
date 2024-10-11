@@ -29,7 +29,8 @@ function Header({toggleTheme}: HeaderType) {
         <img 
           src={logoSrc} 
           alt='SportProno logo' 
-          height="75" 
+          height="75"
+          className="logo"
           onClick={() => { navigate('/') }}
         />
       </Box>

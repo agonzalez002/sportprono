@@ -1,18 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { 
-    Box, 
-    Button, 
-    FormControl, 
-    IconButton, 
-    OutlinedInput, 
-    InputAdornment, 
-    InputLabel, 
-    TextField 
+    Box,
+    TextField
 } from "@mui/material";
-import { uploadAvatar, changePassword } from "../../services/userServices";
-import PasswordIcon from '@mui/icons-material/Password';
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { changeUserData, uploadAvatar } from "../../services/userServices";
 import { toast } from 'react-toastify';
 import { 
     StyledH1, 
@@ -22,22 +14,20 @@ import {
     StyledBoxAvatar,
     StyledUserInfo,
     StyledBox,
-    StyledPasswordBox,
 } from './StyledAccount';
+import { LoadingButton } from "@mui/lab";
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import ChangePassword from "./changePassword";
 
 function Account() {
-    const { authData } = useAuth() || { authData: null };
-    const [ oldPassword, setOldPassword ] = useState<string>();
-    const [ newPassword1, setNewPassword1 ] = useState<string>();
-    const [ newPassword2, setNewPassword2 ] = useState<string>();
-    const [ username, setUsername ] = useState<string>();
-    const [ email, setEmail ] = useState<string>();
-    const [ firstname, setFirstname ] = useState<string>();
-    const [ lastname, setLastname ] = useState<string>();
-    const [ showOldPassword, setShowOldPassword ] = useState<boolean>(false);
-    const [ showNewPassword, setShowNewPassword ] = useState<boolean>(false);
+    const { authData, setAuth } = useAuth();
+    const [ username, setUsername ] = useState<string>('');
+    const [ email, setEmail ] = useState<string>('');
+    const [ firstname, setFirstname ] = useState<string>('');
+    const [ lastname, setLastname ] = useState<string>('');
     const [ imageUrl, setImageUrl ] = useState<string>('');
+    const [ open, setOpen ] = useState<boolean>(false);
+    const [ loading, setLoading ] = useState<boolean>(false);
     const fileInputRef = useRef<HTMLInputElement | null>(null);
 
     if (!authData) {
@@ -53,36 +43,50 @@ function Account() {
             }
             setUsername(authData.user.username);
             setEmail(authData.user.email);
-            setFirstname(authData.user.firstname);
-            setLastname(authData.user.lastname);
+            setFirstname(authData.user.first_name);
+            setLastname(authData.user.last_name);
         }
     }, [authData.user]);
 
-    const passwordMatch = () => {
-        return newPassword1 === newPassword2;
-    }
-
     const handleSubmit = async () => {
-        if (passwordMatch()) {
-            const passwordData = await changePassword(
-                {old_password: oldPassword, new_password: newPassword1}, 
+        setLoading(true);
+        try {            
+            const userData = await changeUserData(
+                {username, email, first_name: firstname, last_name: lastname},
                 authData.user.id,
                 authData.token,
             );
-            if (passwordData) {
-                toast.success("Mot de passe modifié !")
+            if (userData) {
+                const storedData = JSON.parse(localStorage.getItem('sportprono-user') || '{}');
+
+                if (storedData && storedData.value && storedData.value.user) {
+                    const updatedUser = {
+                        ...storedData.value.user,
+                        ...userData.result
+                    };
+
+                    const updatedStoredData = {
+                        ...storedData,
+                        value: {
+                            ...storedData.value,
+                            user: updatedUser
+                        }
+                    };
+
+                    localStorage.setItem('sportprono-user', JSON.stringify(updatedStoredData));
+
+                    toast.success(userData.message || 'Profil mis à jour avec succès !');
+                }
             }
-        } else {
-            toast.warning("Mots de passe différents !");
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                toast.error(error.message);
+            } else {
+                toast.error('Une erreur inconnue est survenue !');
+            }
+        } finally {
+            setLoading(false);
         }
-    }
-
-    const handleClickShowNewPassword = () => {
-        setShowNewPassword(!showNewPassword);
-    }
-
-    const handleClickShowOldPassword = () => {
-        setShowOldPassword(!showOldPassword);
     };
 
     const handleAvatarClick = () => {
@@ -96,9 +100,39 @@ function Account() {
             uploadData.append('image', file, file.name);
             const uploaded = await uploadAvatar(authData.user.profile.id, uploadData, authData.token);
             if (uploaded) {
-                toast.success("Image uploadée !");
+                const storedData = JSON.parse(localStorage.getItem('sportprono-user') || '{}');
+
+                if (storedData && storedData.value && storedData.value.user.profile) {
+                    const updatedProfile = {
+                        ...storedData.value.user.profile,
+                        ...uploaded,
+                    };
+
+                    const updatedUser = {
+                        ...storedData.value.user,
+                        profile: updatedProfile,
+                    };
+
+                    const updatedStoredData = {
+                        ...storedData,
+                        value: {
+                            ...storedData.value,
+                            user: updatedUser
+                        }
+                    };
+
+                    localStorage.setItem('sportprono-user', JSON.stringify(updatedStoredData));
+
+                    setAuth(updatedStoredData.value);
+
+                    toast.success(uploaded.message || 'Avatar mis à jour avec succès !');
+                }
             }
         }
+    };
+
+    const handleOpenPopup = () => {
+        setOpen(true);
     }
 
     return (
@@ -124,123 +158,57 @@ function Account() {
                 />
             </StyledBoxAvatar>
             <StyledUserInfo>
-                <Box className="infos">
-                    <TextField 
-                        variant="outlined" 
-                        label="Nom d'utilisateur"
-                        size="small"
-                        className="input"
-                        value={username}
-                        onChange={event => setUsername(event.target.value)}
-                    >
-                        {authData.user.username}
-                    </TextField>
-                    <TextField 
-                        variant="outlined" 
-                        label="Email"
-                        size="small"
-                        className="input"
-                        value={email}
-                        onChange={event => setEmail(event.target.value)}
-                    >
-                        {authData.user.email}
-                    </TextField>
-                    <TextField 
-                        variant="outlined" 
-                        label="Nom" 
-                        className="input" 
-                        size="small"
-                        value={lastname}
-                        onChange={event => setLastname(event.target.value)}
-                    >
-                        {authData.user.lastname}
-                    </TextField>
-                    <TextField 
-                        variant="outlined" 
-                        label="Prenom" 
-                        className="input" 
-                        size="small"
-                        value={firstname}
-                        onChange={event => setFirstname(event.target.value)}
-                    >
-                        {authData.user.firstname}
-                    </TextField>
-                </Box>
-                <Box className="infos">
-                    <StyledPasswordBox>
-                        <PasswordIcon />
-                        <FormControl variant="outlined" size="small" className="password">
-                            <InputLabel htmlFor="password" className="password-label">Old Password</InputLabel>
-                            <OutlinedInput
-                                id="old-password"
-                                type={showOldPassword ? 'text' : 'password'}
-                                endAdornment={
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            aria-label="toggle old-password visibility"
-                                            onClick={handleClickShowOldPassword}
-                                        >
-                                            {showOldPassword ? <VisibilityOff /> : <Visibility />}
-                                        </IconButton>
-                                    </InputAdornment>
-                                }
-                                onChange={ e => setOldPassword(e.target.value) }
-                            />
-                        </FormControl>
-                    </StyledPasswordBox>
-                    
-                    <StyledPasswordBox>
-                        <PasswordIcon />
-                        <FormControl variant="outlined" size="small" className="password">
-                            <InputLabel htmlFor="password" className="password-label">New Password</InputLabel>
-                            <OutlinedInput
-                                id="new-password"
-                                type={showNewPassword ? 'text' : 'password'}
-                                endAdornment={
-                                    <InputAdornment position="end" className="input">
-                                        <IconButton
-                                            aria-label="toggle new-password visibility"
-                                            onClick={handleClickShowNewPassword}
-                                        >
-                                            {showNewPassword ? <VisibilityOff /> : <Visibility />}
-                                        </IconButton>
-                                    </InputAdornment>
-                                }
-                                onChange={ e => setNewPassword1(e.target.value) }
-                            />
-                        </FormControl>
-                    </StyledPasswordBox>
-
-                    <StyledPasswordBox>
-                        <PasswordIcon />
-                        <FormControl variant="outlined" size="small" className="password">
-                            <InputLabel htmlFor="password2" className="password-label">Confirm new password</InputLabel>
-                            <OutlinedInput
-                                id="new-password2"
-                                type={showNewPassword ? 'text' : 'password'}
-                                endAdornment={
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            aria-label="toggle new-password2 visibility"
-                                            onClick={handleClickShowNewPassword}
-                                        >
-                                            {showNewPassword ? <VisibilityOff /> : <Visibility />}
-                                        </IconButton>
-                                    </InputAdornment>
-                                }
-                                onChange={ e => setNewPassword2(e.target.value) }
-                            />
-                        </FormControl>
-                    </StyledPasswordBox>
-                </Box>
+                <TextField 
+                    variant="outlined" 
+                    label="Nom d'utilisateur"
+                    size="small"
+                    className="input"
+                    value={username}
+                    onChange={event => setUsername(event.target.value)}
+                >
+                    {authData.user.username}
+                </TextField>
+                <TextField 
+                    variant="outlined" 
+                    label="Email"
+                    size="small"
+                    className="input"
+                    value={email}
+                    onChange={event => setEmail(event.target.value)}
+                >
+                    {authData.user.email}
+                </TextField>
+                <TextField 
+                    variant="outlined" 
+                    label="Nom" 
+                    className="input" 
+                    size="small"
+                    value={lastname}
+                    onChange={event => setLastname(event.target.value)}
+                >
+                    {authData.user.last_name}
+                </TextField>
+                <TextField 
+                    variant="outlined" 
+                    label="Prenom" 
+                    className="input" 
+                    size="small"
+                    value={firstname}
+                    onChange={event => setFirstname(event.target.value)}
+                >
+                    {authData.user.first_name}
+                </TextField>
             </StyledUserInfo>
-            <Button 
+            <p className="change-password" onClick={handleOpenPopup}>Changer mon mot de passe</p>
+            <LoadingButton
+                loading={loading}
                 variant='contained' 
                 color='primary' 
                 onClick={handleSubmit}
             >
                 Valider
-            </Button>
+            </LoadingButton>
+            <ChangePassword open={open} setOpen={setOpen} />
         </StyledBox>
     );
 }

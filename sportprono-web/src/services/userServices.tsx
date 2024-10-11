@@ -1,4 +1,4 @@
-import { UserDataSignUpType, ChangePasswordType } from "../interfaces";
+import { UserDataSignUpType, ChangePasswordType, ChangeUserDataType } from "../interfaces";
 import { status } from "../utils";
 
 export function auth(credentials: object) {
@@ -52,6 +52,21 @@ export function changePassword(passwordData: ChangePasswordType, userId: number,
             'Authorization': `Token ${token}`,
         },
         body: JSON.stringify(passwordData),
+    })
+    .then(status)
+    .catch( e => {
+        console.log(e);
+    });
+}
+
+export function changeUserData(userData: ChangeUserDataType, userId: number, token: string) {
+    return fetch(`http://localhost:8000/api/users/${userId}/change_data/`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Token ${token}`,
+        },
+        body: JSON.stringify(userData),
     })
     .then(status)
     .catch( e => {

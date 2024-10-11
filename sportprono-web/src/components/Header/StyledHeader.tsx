@@ -10,6 +10,9 @@ export const StyledHeader = styled('div')(({ theme }) => ({
     },
     img: {
         ":hover": {cursor: "pointer"},
+        '&.logo': {
+            marginLeft: '123px',
+        }
     },
     display: "flex",
     alignItems: "center",

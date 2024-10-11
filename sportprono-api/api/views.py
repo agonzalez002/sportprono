@@ -18,6 +18,7 @@ from .serializers import (
     MemberSerializer,
     EventFullSerializer,
     BetSerializer,
+    ChangeDataSerializer,
 )
 from .signals import events_bulk_update_done
 
@@ -128,6 +129,19 @@ class UserViewSet(viewsets.ModelViewSet):
             user.set_password(serializer.data.get('new_password'))
             user.save()
             return Response({'message': 'Password updated'}, status=status.HTTP_200_OK)
+
+    @action(methods=['PUT'], detail=True, serializer_class=ChangeDataSerializer, permission_classes=[IsAuthenticated])
+    def change_data(self, request, pk):
+        user = CustomUser.objects.get(pk=pk)
+        serializer = ChangeDataSerializer(data=request.data)
+
+        if serializer.is_valid():
+            user.username = serializer.data.get('username')
+            user.email = serializer.data.get('email')
+            user.first_name = serializer.data.get('first_name')
+            user.last_name = serializer.data.get('last_name')
+            user.save()
+            return Response({'message': 'Informations mises à jour !', 'result': serializer.data}, status=status.HTTP_200_OK)
         
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)

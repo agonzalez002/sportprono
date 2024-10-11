@@ -17,6 +17,7 @@ function User({ user, accessAccount, setOpenMenu }: UserProps, ) {
         } else {
             setImageUrl("http://localhost:8000/mediafiles/male.png");
         }
+        console.log(imageUrl);
     }, [user]);
 
     const openMenu = () => {

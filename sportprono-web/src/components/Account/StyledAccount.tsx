@@ -57,32 +57,31 @@ export const StyledBoxAvatar = styled(Box)(() => ({
 
 export const StyledUserInfo = styled(Box)(({ theme }) => ({
     display: 'flex',
-    alignItems: 'flex-start',
+    flexWrap: 'wrap',
     justifyContent: 'center',
-    marginTop: '20px',
-    marginBottom: '20px',
-    '.infos': {
-        display: 'flex',
-        flexDirection: 'column',
-        width: '600px',
-        '.input': {
-            marginTop: '15px',
-            '& .MuiInputLabel-root': {
-                color: theme.palette.mode === 'dark' ? '#fff' : '#000', // Change la couleur du label
-            },
+    gap: '25px',
+    marginTop: '25px',
+    '.input': {
+        width: '500px',
+        '& .MuiInputLabel-root': {
+            color: theme.palette.mode === 'dark' ? '#fff' : '#000', // Change la couleur du label
         },
-        '&:first-child': {
-            marginRight: '20px',
-        }
-    }
+    },
 }));
 
-export const StyledBox = styled(Box)(() => ({
+export const StyledBox = styled(Box)(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom:'20px',
+    '.change-password': {
+        color: theme.palette.mode === 'dark' ? theme.palette.primary.main : theme.palette.primary.main,
+        '&:hover': {
+            cursor: 'pointer',
+            textDecoration: 'underline',
+        }
+    }
 }));
 
 export const StyledPasswordBox = styled(Box)(({ theme }) => ({
