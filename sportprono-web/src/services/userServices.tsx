@@ -1,4 +1,4 @@
-import { UserDataSignUpType, ChangePasswordType, ChangeUserDataType } from "../interfaces";
+import { UserDataSignUpType, ChangePasswordType, ChangeUserDataType, ForgotPwdType } from "../interfaces";
 import { status } from "../utils";
 
 export function auth(credentials: object) {
@@ -73,3 +73,17 @@ export function changeUserData(userData: ChangeUserDataType, userId: number, tok
         console.log(e);
     });
 }
+
+export function forgotPwd(email: ForgotPwdType) {
+    return fetch('http://localhost:8000/api/users/forgot_password/', {
+        method: 'POST',
+        headers:{
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(email),
+    })
+    .then(status)
+    .catch( e => {
+        console.log(e);
+    });
+};

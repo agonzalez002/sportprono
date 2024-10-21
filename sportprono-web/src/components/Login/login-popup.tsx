@@ -15,7 +15,7 @@ import {
 import { useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { auth } from "../../services/userServices";
-import { StyledTextField, StyledInputLabel } from './StyledLoginDialog';
+import { StyledTextField, StyledInputLabel, StyledBox } from './StyledLoginDialog';
 import { toast } from "react-toastify";
 import { LoadingButton } from "@mui/lab";
 
@@ -24,9 +24,10 @@ interface LoginDialogType {
     open: boolean;
     setOpen: (open: boolean) => void;
     setRegisterOpen: (open: boolean) => void;
+    setForgotPasswordOpen: (open: boolean) => void;
 }
 
-function LoginDialog({ open, setOpen, setRegisterOpen }: LoginDialogType,) {
+function LoginDialog({ open, setOpen, setRegisterOpen, setForgotPasswordOpen }: LoginDialogType,) {
     const { setAuth } = useAuth();
     const [ showPassword, setShowPassword ] = useState<boolean>(false);
     const [ username, setUsername ] = useState<string>('');
@@ -71,7 +72,15 @@ function LoginDialog({ open, setOpen, setRegisterOpen }: LoginDialogType,) {
         setUsername('');
         setOpen(false);
         setRegisterOpen(true);
-    }
+    };
+
+    const handleForgotPassword = () => {
+        setPassword('');
+        setUsername('');
+        setOpen(false);
+        setForgotPasswordOpen(true);
+    };
+
     return (
         <Dialog open={open} onClose={handleClose} >
             <DialogTitle>Connexion</DialogTitle>
@@ -110,6 +119,9 @@ function LoginDialog({ open, setOpen, setRegisterOpen }: LoginDialogType,) {
                         />
                     </FormControl>
                 </Box>
+                <StyledBox>
+                    <p className="forgot-password" onClick={handleForgotPassword}>Mot de passe oublié !</p>
+                </StyledBox>
             </DialogContent>
             <DialogActions>
                 <LoadingButton loading={loading} variant='contained' color='primary' onClick={handleSubmit}>Connexion</LoadingButton>

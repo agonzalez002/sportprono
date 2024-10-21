@@ -114,3 +114,7 @@ export interface ChangeUserDataType {
     first_name: string,
     last_name: string,
 }
+
+export interface ForgotPwdType {
+    email: string;
+}

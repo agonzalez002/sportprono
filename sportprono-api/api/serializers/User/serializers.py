@@ -55,3 +55,6 @@ class ChangeDataSerializer(serializers.Serializer):
     email = serializers.CharField()
     first_name = serializers.CharField()
     last_name = serializers.CharField()
+
+class ForgotPasswordSerializer(serializers.Serializer):
+    email = serializers.CharField()

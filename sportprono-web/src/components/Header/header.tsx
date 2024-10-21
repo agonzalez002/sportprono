@@ -7,6 +7,7 @@ import Login from '../Login/login';
 import { useState } from 'react';
 import LoginDialog from '../Login/login-popup';
 import RegisterDialog from '../Login/registerDialog';
+import ForgotPasswordDialog from '../Login/forgotPasswordDialog';
 
 interface HeaderType {
   toggleTheme: () => void;
@@ -16,7 +17,8 @@ function Header({toggleTheme}: HeaderType) {
   const navigate = useNavigate();
 
   const [ loginOpen, setLoginOpen ] = useState<boolean>(false);
-  const [ registerOpen, setRegisterOpen ] = useState<boolean>(false); 
+  const [ registerOpen, setRegisterOpen ] = useState<boolean>(false);
+  const [ forgotPasswordOpen, setForgotPasswordOpen ] = useState<boolean>(false);
 
   const theme = useTheme();
 
@@ -41,8 +43,14 @@ function Header({toggleTheme}: HeaderType) {
           onChange={toggleTheme}
         />
         <Login setLoginOpen={setLoginOpen} />
-        <LoginDialog open={loginOpen} setOpen={setLoginOpen} setRegisterOpen={setRegisterOpen} />
+        <LoginDialog 
+          open={loginOpen} 
+          setOpen={setLoginOpen} 
+          setRegisterOpen={setRegisterOpen} 
+          setForgotPasswordOpen={setForgotPasswordOpen}
+        />
         <RegisterDialog open={registerOpen} setOpen={setRegisterOpen} />
+        <ForgotPasswordDialog open={forgotPasswordOpen} setOpen={setForgotPasswordOpen} />
       </StyledBox>
     </StyledHeader>
   )

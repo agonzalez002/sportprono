@@ -1,4 +1,4 @@
-import { styled, TextField, InputLabel, Popper } from "@mui/material";
+import { styled, Box, TextField, InputLabel, Popper } from "@mui/material";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 
@@ -27,3 +27,13 @@ export const StyledPopper = styled(Popper)(() => ({
 export const StyledAccountCircleIcon = styled(AccountCircleIcon)(() => ({
     marginRight: "10px",
 }));
+
+export const StyledBox = styled(Box)(({ theme }) => ({
+    '.forgot-password': {
+        color: theme.palette.mode === 'dark' ? theme.palette.primary.main : theme.palette.primary.main,
+        '&:hover': {
+            cursor: 'pointer',
+            textDecoration: 'underline',
+        }
+    }
+}))
