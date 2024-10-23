@@ -6,6 +6,10 @@ const StyledMainContent = styled('div')(({ theme }) => ({
     minHeight: '100%',
     textAlign: 'left',
     color: theme.palette.text.primary,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
 }));
 
 export default StyledMainContent;
