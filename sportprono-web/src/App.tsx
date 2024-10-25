@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import Header from './components/Header/header';
-import MainContent from './components/MainContent/main-content';
 import { ThemeProvider } from '@mui/material';
 import { lightTheme, darkTheme } from './theme';
 import { BrowserRouter as Router } from 'react-router-dom';
@@ -8,6 +7,7 @@ import { AuthProvider } from './hooks/AuthProvider';
 import { Bounce, ToastContainer } from 'react-toastify';
 import './style.less';
 import 'react-toastify/dist/ReactToastify.css';
+import Content from './components/Content/content';
 
 
 function App() {
@@ -35,11 +35,7 @@ function App() {
         <div className='App'>
           <Router>
             <Header toggleTheme={toggleTheme} />
-            {
-              <div className='content'>
-                <MainContent />
-              </div>
-            }
+            <Content />
           </Router>
         </div>
         <ToastContainer 
