@@ -1,9 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+import string
+import random
+
 
 def upload_path_handler(instance, filename):
     return f"avatars/{instance.user.id}/{filename}"
+
+def upload_path_group(instance, filename):
+    return f"groupLogo/{instance.id}/{filename}"
 
 
 class CustomUser(AbstractUser):
@@ -20,12 +26,15 @@ class CustomUser(AbstractUser):
 
 
 class Group(models.Model):
-    name = models.CharField(max_length=32, null=False, unique=False)
-    location = models.CharField(max_length=32, null=False)
-    description = models.CharField(max_length=256)
-    
-    class Meta:
-        unique_together = (('name', 'location'))
+    name = models.CharField(max_length=32, null=False, unique=True)
+    image = models.ImageField(upload_to=upload_path_group, blank=True)
+    code = models.CharField(max_length=6, unique=True, editable=False, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.code:
+            self.code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+        super().save(*args, **kwargs)
+
 
 
 class Event(models.Model):

@@ -9,15 +9,15 @@ function Content() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const storedUser =  localStorage.getItem('sportprono-user');
-
-        if (storedUser) {
-            setAuth(JSON.parse(storedUser).value);
-        } else {
-            navigate('/');
+        if (!authData) {
+            const storedUser =  localStorage.getItem('sportprono-user');
+            if (storedUser) {
+                setAuth(JSON.parse(storedUser).value);
+            } else {
+                navigate('/');
+            }
         }
-        
-    }, [setAuth]);
+    }, [authData, setAuth, navigate]);
 
     return (    
         <div className='content'>

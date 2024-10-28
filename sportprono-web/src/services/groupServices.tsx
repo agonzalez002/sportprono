@@ -45,3 +45,17 @@ export function leaveGroup(data: {group: number, user: number}, token: string) {
         console.log(e);
     });
 }
+
+export function createGroup(data: BodyInit, token: string) {
+    return fetch('http://localhost:8000/api/groups/', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Token ${token}`,
+        },
+        body: data,
+    })
+    .then(status)
+    .catch(e => {
+        console.log(e);
+    });
+}

@@ -10,7 +10,7 @@ from django.db.models import Sum
 class GroupSerializer(serializers.ModelSerializer):    
     class Meta:
         model = Group
-        fields = ('id', 'name', 'location', 'description')
+        fields = ('id', 'name', 'image', 'code')
 
 
 class GroupFullSerializer(serializers.ModelSerializer):
@@ -19,7 +19,7 @@ class GroupFullSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Group
-        fields = ('id', 'name', 'location', 'description', 'events', 'members')
+        fields = ('id', 'name', 'image', 'code', 'events', 'members')
 
     def get_members(self, obj):
         people_points = []

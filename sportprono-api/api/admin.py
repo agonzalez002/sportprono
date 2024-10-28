@@ -19,8 +19,9 @@ sensitive_post_parameters_m = method_decorator(sensitive_post_parameters())
 # Register your models here.
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
-    fields = ('name', 'location', 'description')
-    list_display = ('id', 'name', 'location', 'description')
+    fields = ('name', 'image', 'code')
+    readonly_fields = ('code',)
+    list_display = ('id', 'name', 'image', 'code')
 
 
 @admin.register(Event)

@@ -36,7 +36,7 @@ class GroupViewset(viewsets.ModelViewSet):
     def retrieve(self, request, *args, **kwargs): 
         instance = self.get_object()
         serializer = GroupFullSerializer(instance, many=False, context={'request': request})
-        return Response(serializer.data)
+        return Response(serializer.data)        
 
 
 class EventViewset(viewsets.ModelViewSet):

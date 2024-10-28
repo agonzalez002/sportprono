@@ -9,16 +9,17 @@ interface UserProps {
 }
 
 function User({ user, accessAccount, setOpenMenu }: UserProps, ) {
-    const [ imageUrl, setImageUrl ] = useState<string>('');
+    const [ imageUrl, setImageUrl ] = useState<string>('http://localhost:8000/mediafiles/male.png');
 
     useEffect(() => {
-        if (user.profile && user.profile.image) {
-            setImageUrl(user.profile.image_url);
-        } else {
-            setImageUrl("http://localhost:8000/mediafiles/male.png");
+        const newImageUrl = user.profile && user.profile.image_url
+            ? user.profile.image_url
+            : 'http://localhost:8000/mediafiles/male.png';
+
+        if (newImageUrl !== imageUrl) {
+            setImageUrl(newImageUrl);
         }
-        console.log(imageUrl);
-    }, [user]);
+    }, [user.profile?.image_url, imageUrl]);
 
     const openMenu = () => {
         if (accessAccount === true && setOpenMenu) {

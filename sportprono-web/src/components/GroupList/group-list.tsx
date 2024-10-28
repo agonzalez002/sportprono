@@ -5,12 +5,14 @@ import { GroupType } from '../../interfaces';
 import GroupItem from '../GroupItem/group-item';
 import { Grid2, Box } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import AddNewGroupDialog from './AddNewGroupDialog';
 
 function GroupList() {
 
   const [ groups, loading ] = useFetchGroups();
   const [ groupsData, setGroupsData ] = useState<GroupType[]>([]);
-  
+  const [ open, setOpen ] = useState<boolean>(false);  
+
   useEffect(() => {
     if (Array.isArray(groups)) {
       setGroupsData(groups);
@@ -19,6 +21,10 @@ function GroupList() {
 
   if (loading) {
     return <h1>Loading...</h1>;
+  };
+
+  const handleAddNewGroup = () => {
+    setOpen(true);
   };
 
   return (
@@ -31,7 +37,7 @@ function GroupList() {
             )        
           })}
           <Grid2 key='8' size={{ xs: 6, lg: 3 }}>
-              <Card>
+              <Card onClick={handleAddNewGroup}>
                 <Box className="icon">
                   <AddIcon />
                 </Box>
@@ -42,6 +48,7 @@ function GroupList() {
           </Grid2>
         </StyledGrid2>
       </StyledBox>
+      <AddNewGroupDialog open={open} setOpen={setOpen} />
     </StyledGroupContent>
   )
 }

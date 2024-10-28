@@ -20,6 +20,10 @@ export const StyledAvatarBox = styled(Box)(() => ({
     position: 'relative',
     width: '150px',
     height: '150px',
+    '&.group': {
+        width: '80px',
+        height: '80px',
+    },
     '.overlay': {
         position: 'absolute',
         top: '0',
