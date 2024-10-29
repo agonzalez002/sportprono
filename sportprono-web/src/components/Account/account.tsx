@@ -30,12 +30,8 @@ function Account() {
     const [ loading, setLoading ] = useState<boolean>(false);
     const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-    if (!authData) {
-        return <h1>Vous devez être connecté pour accéder à cette page !</h1>
-    }
-
     useEffect(() => {
-        if (authData.user) {
+        if (authData && authData.user) {
             if (authData.user.profile && authData.user.profile.image) {
                 setImageUrl(authData.user.profile.image_url);
             } else {
@@ -46,7 +42,11 @@ function Account() {
             setFirstname(authData.user.first_name);
             setLastname(authData.user.last_name);
         }
-    }, [authData.user]);
+    }, [authData]);
+
+    if (!authData) {
+        return <h1>Vous devez être connecté pour accéder à cette page !</h1>
+    }
 
     const handleSubmit = async () => {
         setLoading(true);

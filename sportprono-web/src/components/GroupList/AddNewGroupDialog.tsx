@@ -1,15 +1,13 @@
 import { LoadingButton } from "@mui/lab";
 import { 
-    Box, 
-    Button, 
-    Dialog, 
-    DialogActions, 
-    DialogContent, 
-    DialogTitle, 
-    FormControl, 
-    FormControlLabel, 
-    RadioGroup, 
-    TextField, 
+    Box,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    FormControlLabel,
+    RadioGroup,
 } from "@mui/material";
 import { useRef, useState } from "react";
 import { 
@@ -53,21 +51,33 @@ function AddNewGroupDialog({open, setOpen}: AddNewGroupType) {
     };
 
     const handleSubmit = async () => {
-        const uploadData = new FormData();
-        if (groupLogo) {
-            uploadData.append('image', groupLogo, groupLogo.name);
+        setLoading(true);
+        try {
+            const uploadData = new FormData();
+            if (groupLogo) {
+                uploadData.append('image', groupLogo, groupLogo.name);
+            }
+            uploadData.append('name', name);
+            uploadData.append('access', access);
+            const created = await createGroup(uploadData, authData.token);
+            if (created) {
+                setName('');
+                setImageUrl(emptyFile);
+                setAccess('private');
+                setGroupLogo(undefined);
+                setOpen(false);
+                toast.success(created.message || 'Nouveau Groupe créé !');
+            }
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                toast.error(error.message);
+            } else {
+                toast.error('Une erreur inconnue est survenue !');
+            }
+        } finally {
+            setLoading(false);
         }
-        uploadData.append('name', name);
-        uploadData.append('access', access);
-        const created = await createGroup(uploadData, authData.token);
-        if (created) {
-            setName('');
-            setImageUrl(emptyFile);
-            setAccess('private');
-            setGroupLogo(undefined);
-            setOpen(false);
-            toast.success(created.message || 'Nouveau Groupe créé !');
-        }
+        
     };
 
     const private_text = "Seul les personnes possédant le code d'accés pourront rejoindre votre groupe."

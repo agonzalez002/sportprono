@@ -1,12 +1,11 @@
-import React, {createContext, useEffect, useState } from 'react';
-import { UserType, AuthContextType } from "../interfaces";
+import { useEffect, useState } from 'react';
+import { UserType } from "../interfaces";
+import { AuthContext } from '../contexts/AuthContext';
 
 interface AuthProviderType {
     user?: UserType;
     children: React.ReactNode;
 }
-
-export const AuthContext = createContext<AuthContextType | null>(null);
 
 const setItemWithExpiration = (key: string, value: object, expirationInMinutes: number) => {
     const now = new Date();

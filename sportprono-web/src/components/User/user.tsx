@@ -19,7 +19,7 @@ function User({ user, accessAccount, setOpenMenu }: UserProps, ) {
         if (newImageUrl !== imageUrl) {
             setImageUrl(newImageUrl);
         }
-    }, [user.profile?.image_url, imageUrl]);
+    }, [user.profile, user.profile?.image_url, imageUrl]);
 
     const openMenu = () => {
         if (accessAccount === true && setOpenMenu) {
