@@ -36,7 +36,13 @@ class GroupViewset(viewsets.ModelViewSet):
     def retrieve(self, request, *args, **kwargs): 
         instance = self.get_object()
         serializer = GroupFullSerializer(instance, many=False, context={'request': request})
-        return Response(serializer.data)        
+        return Response(serializer.data)
+    
+    def create(self, request, *args, **kwargs):
+        access = request.data.pop('access', None)
+        request.data['is_private'] = access[0] == 'private'
+        super().create(request, *args, **kwargs)
+        return Response({'message': 'Votre nouveau groupe à été créé !'}, status=status.HTTP_200_OK)
 
 
 class EventViewset(viewsets.ModelViewSet):
@@ -153,7 +159,7 @@ class UserViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             try:
                 user = CustomUser.objects.get(email=serializer.data.get('email'))
-            except User.DoesNotExist:
+            except CustomUser.DoesNotExist:
                 return Response({'message': "Cet email n'est pas utilisé dans un compte d'utilisateur"}, status=status.HTTP_400_BAD_REQUEST)
             new_password = get_random_string(length=10)
             user.set_password(new_password)
@@ -165,7 +171,7 @@ class UserViewSet(viewsets.ModelViewSet):
             send_html_email('Nouveau mot de passe', [user.email], 'emails/forgot_password.html', email_data)
             message = "Un email vient de vous être envoyé avec votre nouveau mot de passe."
             return Response({'message': message}, status=status.HTTP_200_OK)
-        return Respone({'message': 'Email non valide'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'message': 'Email non valide'}, status=status.HTTP_400_BAD_REQUEST)
 
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
