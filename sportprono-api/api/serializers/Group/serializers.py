@@ -5,12 +5,25 @@ from ..Event.serializers import EventSerializer
 from ..Member.serializers import MemberSerializer
 
 from django.db.models import Sum
+from django.conf import settings
 
 
-class GroupSerializer(serializers.ModelSerializer):    
+class GroupSerializer(serializers.ModelSerializer):
+    image_url = serializers.SerializerMethodField()
+
     class Meta:
         model = Group
-        fields = ('id', 'name', 'image', 'code')
+        fields = ('id', 'name', 'image', 'image_url', 'code', 'is_private', 'searchCode')
+    
+    def get_image_url(self, obj):
+        request = self.context.get('request')
+        if obj.image:
+            if request is not None:
+                return request.build_absolute_uri(obj.image.url)
+            else:
+                return f"{settings.SITE_URL}{obj.image.url}"
+        return None
+
 
 
 class GroupFullSerializer(serializers.ModelSerializer):

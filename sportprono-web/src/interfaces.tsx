@@ -67,8 +67,11 @@ export interface GroupFullType {
 export interface GroupType {
     id: number,
     name: string,
-    location: string,
-    description: string | null,
+    image: string,
+    image_url: string,
+    code: string,
+    is_private: boolean,
+    searchCode: string,
 }
 
 export interface UserDataSignUpType {
