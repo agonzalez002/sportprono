@@ -1,11 +1,18 @@
 import { styled } from "@mui/material";
-import { Link } from "react-router-dom";
 
-export const StyledLink = styled(Link)(({ theme }) => ({
-    width: '65px',
-    display: 'flex',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    color: '#000',
-    ":hover": theme.palette.secondary.main,
-}))
+export const StyledBack = styled("p")(({ theme }) => ({
+  width: "100%",
+  span: {
+    display: "flex",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    color: "#fff",
+    "&:hover": {
+      cursor: "pointer",
+      color: theme.palette.primary.main,
+    },
+  },
+  backgroundColor: theme.palette.background.default,
+  margin: "0",
+  padding: "20px",
+}));

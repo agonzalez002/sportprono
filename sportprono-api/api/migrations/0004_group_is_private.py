@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0003_group_searchcode'),
+        ("api", "0003_group_searchcode"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='group',
-            name='is_private',
+            model_name="group",
+            name="is_private",
             field=models.BooleanField(default=False),
         ),
     ]

@@ -1,16 +1,24 @@
-from django.contrib import admin
-from .models import Group, Event, UserProfile, Member, Bet, CustomUser
+from html import escape
+from urllib.parse import unquote
 
-from django.urls import path
+from django.conf import settings
+from django.contrib import admin, messages
+from django.contrib.admin.options import IS_POPUP_VAR
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import (AdminPasswordChangeForm, UserChangeForm,
+                                       UserCreationForm)
+from django.core.exceptions import PermissionDenied
+from django.db import router, transaction
+from django.http import Http404, HttpResponseRedirect
+from django.template.response import TemplateResponse
+from django.urls import path, reverse
 from django.utils.decorators import method_decorator
-from django.views.decorators.debug import sensitive_post_parameters
+from django.utils.translation import gettext
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_protect
-from django.contrib.auth.forms import (
-    AdminPasswordChangeForm,
-    UserChangeForm,
-    UserCreationForm,
-)
+from django.views.decorators.debug import sensitive_post_parameters
+
+from .models import Bet, CustomUser, Event, Group, Member, UserProfile
 
 csrf_protect_m = method_decorator(csrf_protect)
 sensitive_post_parameters_m = method_decorator(sensitive_post_parameters())
@@ -19,33 +27,34 @@ sensitive_post_parameters_m = method_decorator(sensitive_post_parameters())
 # Register your models here.
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
-    fields = ('name', 'image', 'code', 'searchCode')
-    readonly_fields = ('code', 'searchCode')
-    list_display = ('id', 'name', 'image', 'searchCode')
+    fields = ("name", "image", "code", "searchCode")
+    readonly_fields = ("code", "searchCode")
+    list_display = ("id", "name", "image", "searchCode")
 
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    fields = ('team1', 'team2', 'time', 'score1', 'score2', 'group', 'team1_bonus', 'team2_bonus')
-    list_display = ('id', 'team1', 'team2', 'time', 'group')
+    fields = ("team1", "team2", "time", "score1", "score2", "group", "team1_bonus", "team2_bonus")
+    list_display = ("id", "team1", "team2", "time", "group")
 
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
-    fields = ('user', 'image', 'is_premium', 'bio')
-    list_display = ('id', 'user', 'image', 'is_premium')
+    fields = ("user", "image", "is_premium", "bio")
+    list_display = ("id", "user", "image", "is_premium")
 
-    
+
 @admin.register(Member)
 class MemberAdmin(admin.ModelAdmin):
-    fields = ('user', 'group', 'admin')
-    list_display = ('id', 'user', 'group', 'admin')
+    fields = ("user", "group", "admin")
+    list_display = ("id", "user", "group", "admin")
 
 
 @admin.register(Bet)
 class BetAdmin(admin.ModelAdmin):
-    fields = ('user', 'event', 'score1', 'score2', 'points', 'team1_bonus', 'team2_bonus')
-    list_display = ('id', 'user', 'event')
+    fields = ("user", "event", "score1", "score2", "points", "team1_bonus", "team2_bonus")
+    list_display = ("id", "user", "event")
+
 
 @admin.register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
@@ -117,9 +126,7 @@ class CustomUserAdmin(admin.ModelAdmin):
     # def lookup_allowed(self, lookup, value, request):
     def lookup_allowed(self, lookup, value, request=None):
         # Don't allow lookups involving passwords.
-        return not lookup.startswith("password") and super().lookup_allowed(
-            lookup, value, request
-        )
+        return not lookup.startswith("password") and super().lookup_allowed(lookup, value, request)
 
     @sensitive_post_parameters_m
     @csrf_protect_m
@@ -176,10 +183,7 @@ class CustomUserAdmin(admin.ModelAdmin):
                 # must be "unset-password". This check is most relevant when
                 # the admin user has two submit buttons available (for example
                 # when Javascript is disabled).
-                valid_submission = (
-                    form.cleaned_data["set_usable_password"]
-                    or "unset-password" in request.POST
-                )
+                valid_submission = form.cleaned_data["set_usable_password"] or "unset-password" in request.POST
                 if not valid_submission:
                     msg = gettext("Conflicting form data submitted. Please try again.")
                     messages.error(request, msg)
@@ -238,8 +242,7 @@ class CustomUserAdmin(admin.ModelAdmin):
 
         return TemplateResponse(
             request,
-            self.change_user_password_template
-            or "admin/auth/user/change_password.html",
+            self.change_user_password_template or "admin/auth/user/change_password.html",
             context,
         )
 

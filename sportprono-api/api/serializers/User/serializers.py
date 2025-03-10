@@ -1,9 +1,8 @@
+from django.conf import settings
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
-from django.conf import settings
-
-from ...models import UserProfile, CustomUser
+from ...models import CustomUser, UserProfile
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -11,10 +10,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = ('id', 'image', 'image_url', 'is_premium', 'bio')
+        fields = ("id", "image", "image_url", "is_premium", "bio")
 
     def get_image_url(self, obj):
-        request = self.context.get('request')
+        request = self.context.get("request")
         if obj.image:
             if request is not None:
                 return request.build_absolute_uri(obj.image.url)
@@ -28,16 +27,16 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ('id', 'username', 'email', 'password', 'profile', 'first_name', 'last_name')
+        fields = ("id", "username", "email", "password", "profile", "first_name", "last_name")
         extra_kwargs = {
-            'password': {
-                'write_only': True, 
-                'required': False,
-                }
+            "password": {
+                "write_only": True,
+                "required": False,
             }
-        
+        }
+
     def create(self, validated_data):
-        profile_data = validated_data.pop('profile', None)
+        profile_data = validated_data.pop("profile", None)
         user = CustomUser.objects.create_user(**validated_data)
         if profile_data:
             UserProfile.objects.create(user=user, **profile_data)
@@ -55,6 +54,7 @@ class ChangeDataSerializer(serializers.Serializer):
     email = serializers.CharField()
     first_name = serializers.CharField()
     last_name = serializers.CharField()
+
 
 class ForgotPasswordSerializer(serializers.Serializer):
     email = serializers.CharField()

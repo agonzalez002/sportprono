@@ -1,22 +1,25 @@
 import { useEffect, useState } from "react";
+import { PaginateType } from "../interfaces";
 import { getGroups } from "../services/groupServices";
-import { GroupType } from "../interfaces";
+import { useAuth } from "./useAuth";
 
-function useFetchGroups() {
-    const [ groups, setGroups ] = useState<GroupType[] | null>(null);
-    const [ loading, setLoading ] = useState<boolean>(true);
+export function useFetchGroups(page: number) {
+  const { authData } = useAuth();
+  const [data, setData] = useState<PaginateType>();
+  const [nextPage, setNextPage] = useState<number | null>(null);
+  const [previousPage, setPreviousPage] = useState<number | null>(null);
 
-    useEffect(() => {
-        const getData = async () => {
-            setLoading(true);
-            const data = await getGroups();
-            setGroups(data);
-            setLoading(false);
-        };
-        getData();
-    }, []);
+  useEffect(() => {
+    const getData = async () => {
+      if (authData) {
+        const result = await getGroups(page, authData.token);
+        setData(result.results);
+        setNextPage(result.next);
+        setPreviousPage(result.previous);
+      }
+    };
+    getData();
+  }, [authData, page]);
 
-    return [groups, loading];
-};
-
-export default useFetchGroups;
+  return { data, nextPage, previousPage };
+}
