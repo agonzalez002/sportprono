@@ -2,7 +2,7 @@ from django.conf import settings
 from django.db.models import Sum
 from rest_framework import serializers
 
-from ...models import Bet, Group
+from ...models import Bet, Group, Member
 from ..Event.serializers import EventSerializer
 from ..Member.serializers import MemberSerializer
 
@@ -26,11 +26,12 @@ class GroupSerializer(serializers.ModelSerializer):
 
 class GroupFullSerializer(serializers.ModelSerializer):
     events = EventSerializer(many=True)
+    creator = serializers.SerializerMethodField()
     members = serializers.SerializerMethodField()
 
     class Meta:
         model = Group
-        fields = ("id", "name", "image", "code", "events", "members")
+        fields = ("id", "name", "image", "code", "events", "members", "creator")
 
     def get_members(self, obj):
         people_points = []
@@ -45,3 +46,7 @@ class GroupFullSerializer(serializers.ModelSerializer):
             people_points.append(member_data)
 
         return people_points
+
+    def get_creator(self, obj):
+        admin = Member.objects.get(group=obj, admin=True)
+        return admin.user.username

@@ -1,7 +1,9 @@
 import { styled } from "@mui/material";
 
 export const StyledBack = styled("p")(({ theme }) => ({
-  width: "100%",
+  position: "absolute",
+  top: "20px",
+  left: "20px",
   span: {
     display: "flex",
     justifyContent: "flex-start",
@@ -14,5 +16,4 @@ export const StyledBack = styled("p")(({ theme }) => ({
   },
   backgroundColor: theme.palette.background.default,
   margin: "0",
-  padding: "20px",
 }));

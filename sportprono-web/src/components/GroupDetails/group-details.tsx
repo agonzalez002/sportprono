@@ -1,7 +1,6 @@
 import AddIcon from "@mui/icons-material/Add";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import LogoutIcon from "@mui/icons-material/Logout";
-import SettingsIcon from "@mui/icons-material/Settings";
 import { Badge, Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -12,7 +11,12 @@ import { GroupFullType, MemberType } from "../../interfaces";
 import { joinGroup, leaveGroup } from "../../services/groupServices";
 import EventList from "../EventList/event-list";
 import User from "../User/user";
-import { StyledGroupDetails } from "./StyledGroupDetails";
+import {
+  GroupHeader,
+  StyledGroupDetails,
+  StyledSettingsIcon,
+  TitleContainer,
+} from "./StyledGroupDetails";
 
 function GroupDetails() {
   const navigate = useNavigate();
@@ -115,31 +119,36 @@ function GroupDetails() {
     <StyledGroupDetails>
       {group && (
         <>
-          {inGroup ? (
-            <Button onClick={() => leave()} variant="contained" color="primary">
-              <LogoutIcon /> Leave
-            </Button>
-          ) : (
-            <Button onClick={() => join()} variant="contained" color="primary">
-              <AddIcon /> Join
-            </Button>
-          )}
-          {isAdmin && (
-            <Button
-              onClick={() => addEvent()}
-              variant="contained"
-              color="primary"
-            >
-              <SettingsIcon /> Manage group
-            </Button>
-          )}
+          <GroupHeader>
+            <TitleContainer>
+              <h1>{group?.name}</h1>
+              {inGroup ? (
+                <>
+                  {!isAdmin && (
+                    <Button
+                      onClick={() => leave()}
+                      variant="contained"
+                      color="primary"
+                    >
+                      <LogoutIcon /> Quitter
+                    </Button>
+                  )}
+                </>
+              ) : (
+                <Button
+                  onClick={() => join()}
+                  variant="contained"
+                  color="primary"
+                >
+                  <AddIcon /> Rejoindre
+                </Button>
+              )}
+              {isAdmin && <StyledSettingsIcon onClick={() => addEvent()} />}
+            </TitleContainer>
+            <p>Créé par: {group?.creator.toUpperCase()}</p>
+          </GroupHeader>
 
-          <h1>Details here for group {id} !</h1>
-          <p>Name: {group?.name}</p>
-          <p>Description: {group?.description}</p>
-          <p>Location: {group?.location}</p>
-
-          <EventList events={group.events} />
+          <EventList />
 
           <h3>Members :</h3>
           {group.members.map((member) => {

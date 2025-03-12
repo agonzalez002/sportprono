@@ -62,6 +62,7 @@ export interface GroupFullType {
   description: string | null;
   events: EventType[];
   members: MemberType[];
+  creator: string;
 }
 
 export interface GroupType {
